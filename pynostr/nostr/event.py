@@ -15,6 +15,7 @@ class EventKind(Enum):
     Metadata = 0
     TextNote = 1
     RecommendRelay = 2
+    ContactList = 3
 
 
 def filter_none(attribute: attr.Attribute, value: Any) -> bool:

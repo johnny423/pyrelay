@@ -2,6 +2,7 @@ from collections import defaultdict
 
 import pytest
 
+from pynostr.nostr.event import EventKind, NostrTag
 from pynostr.nostr.event_builder import EventBuilder
 from pynostr.nostr.filters import NostrFilter
 from pynostr.nostr.requests import NostrEventUpdate, NostrRequest, NostrClose
@@ -80,7 +81,7 @@ class TestRelayService:
 
         # Report events and broadcast to subscribers
         for i, event_builder in enumerate(event_builders):
-            event = event_builder.create_event(f"{i*2}")
+            event = event_builder.create_event(f"{i * 2}")
             events.append(event)
             client_session = MockClientSession()
             await service.handle(client_session, event)
@@ -94,7 +95,7 @@ class TestRelayService:
             await service.handle(client, NostrClose(f"{j}"))
 
         for i, event_builder in enumerate(event_builders):
-            event = event_builder.create_event(f"{i*3}")
+            event = event_builder.create_event(f"{i * 3}")
             events.append(event)
             client_session = MockClientSession()
             await service.handle(client_session, event)
@@ -109,3 +110,17 @@ class TestRelayService:
         client_session = MockClientSession()
         with pytest.raises(TypeError):
             await service.handle(client_session, "hello")
+
+    @pytest.mark.asyncio
+    async def test_event_3(self, event_builder):
+        service = get_service()
+        client_session = MockClientSession()
+        event = event_builder.create_event(
+            "", kind=EventKind.ContactList, tags=
+            [
+                NostrTag("p", "91cf9..4e5ca", extra=["wss://alicerelay.com/", "alice"]),
+                NostrTag("p", "14aeb..8dad4", extra=["wss://bobrelay.com/nostr", "bob"]),
+                NostrTag("p", "612ae..e610f", extra=["ws://carolrelay.com/ws", "carol"]),
+            ]
+        )
+        service.handle(client_session, event)

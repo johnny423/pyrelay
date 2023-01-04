@@ -1,6 +1,6 @@
 import pytest
 
-from pynostr.nostr.event import EventKind
+from pynostr.nostr.event import EventKind, NostrTag
 from pynostr.nostr.filters import NostrFilter
 
 
@@ -199,3 +199,16 @@ class EventRepoTestBase:
         )
         assert await self.apply([filt_no_match, filt_match], event, repo)
         assert await self.apply([filt_match, filt_no_match], event, repo)
+
+    @pytest.mark.asyncio
+    async def test_event_type_3(self, event_builder, repo):
+        event = event_builder.create_event(
+            "", kind=EventKind.ContactList, tags=
+            [
+                NostrTag("p", "91cf9..4e5ca", extra=["wss://alicerelay.com/", "alice"]),
+                NostrTag("p", "14aeb..8dad4", extra=["wss://bobrelay.com/nostr", "bob"]),
+                NostrTag("p", "612ae..e610f", extra=["ws://carolrelay.com/ws", "carol"]),
+            ]
+        )
+        assert self.apply(None, event, repo)
+

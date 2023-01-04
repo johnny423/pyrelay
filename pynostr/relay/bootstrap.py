@@ -18,5 +18,3 @@ def set_up_session_maker(
     async_uri = async_uri or settings.ASYNC_SQLALCHEMY_DATABASE_URI
     engine = start_engine(async_uri)
     return start_session(engine)
-
-
