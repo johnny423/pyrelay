@@ -16,6 +16,7 @@ class EventKind(Enum):
     TextNote = 1
     RecommendRelay = 2
     ContactList = 3
+    EncryptedDirectMessage = 4
 
 
 def filter_none(attribute: attr.Attribute, value: Any) -> bool:
