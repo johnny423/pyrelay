@@ -1,0 +1,10 @@
+.mypy_cache
+docker-stack.yml
+__pycache__
+app.egg-info
+.coverage
+htmlcov
+.hypothesis
+.pytest_cache
+*.db
+.idea
