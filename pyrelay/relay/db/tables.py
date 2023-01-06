@@ -1,4 +1,13 @@
-from sqlalchemy import Column, Enum, ForeignKey, Integer, PickleType, String, Table
+from sqlalchemy import (
+    Column,
+    DateTime,
+    Enum,
+    ForeignKey,
+    Integer,
+    PickleType,
+    String,
+    Table,
+)
 from sqlalchemy.orm import registry, relationship
 
 from pyrelay.nostr.event import EventKind, NostrEvent, NostrTag
@@ -15,6 +24,7 @@ event = Table(
     Column("created_at", Integer, index=True),
     Column("content", String, nullable=False),
     Column("sig", String, nullable=False),
+    Column("deleted_at", DateTime, nullable=True),
 )
 
 tag = Table(

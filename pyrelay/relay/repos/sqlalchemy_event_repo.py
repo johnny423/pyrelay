@@ -1,11 +1,12 @@
+from datetime import datetime, timezone
 from typing import Optional, Self
 
-from sqlalchemy import and_, or_, select
+from sqlalchemy import and_, column, or_, select, update
 from sqlalchemy.orm import contains_eager, sessionmaker
 from sqlalchemy.sql import Select
 from sqlalchemy.sql.elements import BinaryExpression, BooleanClauseList
 
-from pyrelay.nostr.event import EventKind, NostrEvent, NostrTag
+from pyrelay.nostr.event import EventId, EventKind, NostrEvent, NostrTag
 from pyrelay.nostr.filters import NostrFilter
 from pyrelay.relay.relay_service import EventsRepository
 
@@ -13,6 +14,19 @@ from pyrelay.relay.relay_service import EventsRepository
 class SqlAlchemyEventRepository(EventsRepository):
     def __init__(self, session: sessionmaker) -> None:
         self.session_maker = session
+
+    async def delete(self, event_ids: list[EventId]) -> None:
+        async with self.session_maker() as s:
+            async with self.session_maker.begin():
+                query = (
+                    update(NostrEvent)
+                    .where(NostrEvent.id.in_(event_ids))
+                    .values(deleted_at=datetime.now(timezone.utc))
+                    .execution_options(synchronize_session="fetch")
+                )
+
+                await s.execute(query)
+            await s.commit()
 
     async def add(self, event: NostrEvent) -> None:
         async with self.session_maker() as s:
@@ -26,6 +40,7 @@ class SqlAlchemyEventRepository(EventsRepository):
             select(NostrEvent)
             .outerjoin(NostrTag)
             .options(contains_eager(NostrEvent.tags))
+            .filter(column("deleted_at").is_(None))
         )
 
         query_builder = EventQueryBuilder(query)

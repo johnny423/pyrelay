@@ -1,10 +1,11 @@
 import logging
 from abc import ABC, abstractmethod
 from collections import UserDict
+from typing import Collection
 
 import attr
 
-from pyrelay.nostr.event import NostrDataType, NostrEvent
+from pyrelay.nostr.event import EventId, NostrDataType, NostrEvent
 from pyrelay.nostr.filters import NostrFilter, apply_many
 from pyrelay.nostr.msgs import NostrClose, NostrEOSE, NostrEventUpdate, NostrRequest
 from pyrelay.relay.client_session import ClientSession
@@ -21,10 +22,13 @@ class EventsRepository(ABC):
         """
 
     @abstractmethod
-    async def query(self, *filters: NostrFilter) -> list[NostrEvent]:
+    async def query(self, *filters: NostrFilter) -> Collection[NostrEvent]:
         """
         Fetch stored events that match one of the filters
         """
+
+    async def delete(self, event_ids: list[EventId]) -> None:
+        ...
 
 
 @attr.s(auto_attribs=True)
