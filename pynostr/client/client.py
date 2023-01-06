@@ -3,7 +3,7 @@ from typing import Optional
 from pynostr.nostr.event import NostrDataType, NostrEvent, NostrTag
 from pynostr.nostr.event_builder import EventBuilder
 from pynostr.nostr.filters import NostrFilter
-from pynostr.nostr.requests import NostrRequest
+from pynostr.nostr.msgs import NostrRequest
 from pynostr.nostr.serialize import dumps, loads
 
 

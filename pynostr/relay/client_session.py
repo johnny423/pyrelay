@@ -1,6 +1,6 @@
 from typing import Any, Callable
 
-from pynostr.nostr.requests import NostrEventUpdate
+from pynostr.nostr.event import NostrDataType
 from pynostr.nostr.serialize import dumps
 
 
@@ -31,6 +31,8 @@ class ClientSession(BaseClientSession):
         super(ClientSession, self).__init__()
         self.websocket = websocket
 
-    async def send_event(self, event_update: NostrEventUpdate) -> None:
-        if not self._closed:
-            await self.websocket.send(dumps(event_update))
+    async def send(self, msg: NostrDataType) -> None:
+        if self._closed:
+            return
+
+        await self.websocket.send(dumps(msg))

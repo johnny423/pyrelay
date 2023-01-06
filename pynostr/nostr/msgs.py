@@ -1,3 +1,5 @@
+from typing import Any
+
 import attr
 
 from pynostr.nostr.event import NostrDataType, NostrEvent
@@ -9,7 +11,7 @@ class NostrRequest(NostrDataType):
     subscription_id: str
     filters: tuple[NostrFilter, ...]
 
-    def serialize(self):
+    def serialize(self) -> Any:
         return [
             "REQ",
             self.subscription_id,
@@ -20,7 +22,7 @@ class NostrRequest(NostrDataType):
 class NostrClose(NostrDataType):
     subscription_id: str
 
-    def serialize(self):
+    def serialize(self) -> Any:
         return ["CLOSE", self.subscription_id]
 
 
@@ -29,7 +31,7 @@ class NostrEventUpdate(NostrDataType):
     subscription_id: str
     event: NostrEvent
 
-    def serialize(self):
+    def serialize(self) -> Any:
         _, event_serialized = self.event.serialize()
         return ["EVENT", self.subscription_id, event_serialized]
 
@@ -38,5 +40,17 @@ class NostrEventUpdate(NostrDataType):
 class NostrNoticeUpdate(NostrDataType):
     message: str
 
-    def serialize(self):
+    def serialize(self) -> Any:
         return ["NOTICE", self.message]
+
+
+@attr.s(auto_attribs=True)
+class NostrEOSE(NostrDataType):
+    """
+    End of Stored Events Notice
+    """
+
+    subscription_id: str
+
+    def serialize(self) -> Any:
+        return ["EOSE", self.subscription_id]

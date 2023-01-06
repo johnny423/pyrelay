@@ -2,10 +2,10 @@ from collections import defaultdict
 
 import pytest
 
-from pynostr.nostr.event import EventKind, NostrTag
+from pynostr.nostr.event import EventKind, NostrTag, NostrDataType
 from pynostr.nostr.event_builder import EventBuilder
 from pynostr.nostr.filters import NostrFilter
-from pynostr.nostr.requests import NostrEventUpdate, NostrRequest, NostrClose
+from pynostr.nostr.msgs import NostrEventUpdate, NostrRequest, NostrClose, NostrEOSE
 from pynostr.relay.client_session import BaseClientSession
 from pynostr.relay.relay_service import RelayService, Subscriptions
 from pynostr.relay.repos.in_memory_event_repo import InMemoryEventsRepository
@@ -21,7 +21,7 @@ class MockClientSession(BaseClientSession):
         super(MockClientSession, self).__init__()
         self.calls = defaultdict(list)
 
-    async def send_event(self, event_update: NostrEventUpdate):
+    async def send(self, event_update: NostrDataType):
         self.calls["send_event"].append(event_update)
 
 
@@ -77,7 +77,11 @@ class TestRelayService:
 
         for j, client in enumerate(clients):
             calls = client.calls["send_event"]
-            assert [event_update.event for event_update in calls] == [events[j]]
+            expected = [
+                NostrEventUpdate(f"{j}", events[j]),
+                NostrEOSE(f"{j}")
+            ]
+            assert calls == expected
 
         # Report events and broadcast to subscribers
         for i, event_builder in enumerate(event_builders):
@@ -88,7 +92,14 @@ class TestRelayService:
 
         for j, client in enumerate(clients):
             calls = client.calls["send_event"]
-            assert [event_update.event for event_update in calls] == [events[j], events[j + 10]]
+            expected = [
+                NostrEventUpdate(f"{j}", events[j]),
+                NostrEOSE(f"{j}"),
+                NostrEventUpdate(f"{j}", events[j + 10]),
+
+            ]
+
+            assert calls == expected
 
         # Un-subscribe
         for j, client in enumerate(clients):
@@ -102,8 +113,14 @@ class TestRelayService:
 
         for j, client in enumerate(clients):
             calls = client.calls["send_event"]
-            assert [event_update.event for event_update in calls] == [events[j], events[j + 10]]
+            expected = [
+                NostrEventUpdate(f"{j}", events[j]),
+                NostrEOSE(f"{j}"),
+                NostrEventUpdate(f"{j}", events[j + 10]),
 
+            ]
+            assert calls == expected
+    
     @pytest.mark.asyncio
     async def test_wrong_msg(self):
         service = get_service()

@@ -12,11 +12,19 @@ URL: TypeAlias = str
 
 
 class EventKind(Enum):
-    Metadata = 0
-    TextNote = 1
-    RecommendRelay = 2
-    ContactList = 3
-    EncryptedDirectMessage = 4
+    Metadata = 0  # nip  1,5
+    TextNote = 1  # nip  1
+    RecommendRelay = 2  # nip  1
+    ContactList = 3  # nip 2
+    EncryptedDirectMessage = 4  # nip 4
+    EventDeletion = 5  # nip 9
+    Repost = 6  # nip 18
+    Reaction = 7  # nip 25
+    ChannelCreation = 40  # nip 28
+    ChannelMetadata = 41  # nip 28
+    ChannelMessage = 42  # nip 28
+    ChannelHideMessage = 43  # nip 28
+    ChannelMuteUser = 44  # nip 28
 
 
 def filter_none(attribute: attr.Attribute, value: Any) -> bool:
@@ -25,7 +33,7 @@ def filter_none(attribute: attr.Attribute, value: Any) -> bool:
 
 @attr.s(auto_attribs=True)
 class NostrDataType:
-    def serialize(self):
+    def serialize(self) -> Any:
         """
         Each datatype should be able to covert into object that can be jsonify
         """
@@ -40,7 +48,7 @@ class NostrTag(NostrDataType):
     key: str
     extra: list[str]
 
-    def serialize(self):
+    def serialize(self) -> Any:
         return [self.type, self.key] + (self.extra or [])
 
 
@@ -108,7 +116,7 @@ class NostrEvent(BaseNostrEvent):
     def verify(self) -> bool:
         return verify(event_id=self.calc_id(), pubkey=self.pubkey, sig=self.sig)
 
-    def serialize(self):
+    def serialize(self) -> Any:
         msg = self.dict()
         return ["EVENT", msg]
 
@@ -121,7 +129,7 @@ class NostrEvent(BaseNostrEvent):
 
 @attr.s(auto_attribs=True)
 class UnsignedNostrEvent(BaseNostrEvent):
-    def sign(self, private_key_hex: str) -> "NostrEvent":
+    def sign(self, private_key_hex: str) -> NostrEvent:
         event_id = self.calc_id()
         return NostrEvent(
             id=event_id,

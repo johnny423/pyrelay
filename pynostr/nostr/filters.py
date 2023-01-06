@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Optional
 
 import attr
 
@@ -53,7 +53,7 @@ class NostrFilter(NostrDataType):
     def empty(cls) -> "NostrFilter":
         return cls()
 
-    def serialize(self):
+    def serialize(self) -> Any:
         data = self.dict()
         if "kinds" in data:
             data["kinds"] = [kind.value for kind in data["kinds"]]

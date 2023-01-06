@@ -6,7 +6,7 @@ import attr
 
 from pynostr.nostr.event import NostrDataType, NostrEvent
 from pynostr.nostr.filters import NostrFilter, apply_many
-from pynostr.nostr.requests import NostrClose, NostrEventUpdate, NostrRequest
+from pynostr.nostr.msgs import NostrClose, NostrEOSE, NostrEventUpdate, NostrRequest
 from pynostr.relay.client_session import ClientSession
 
 logger = logging.getLogger(__name__)
@@ -40,7 +40,7 @@ class Subscription:
             update = NostrEventUpdate(
                 subscription_id=self.request.subscription_id, event=event
             )
-            await self.client_session.send_event(update)
+            await self.client_session.send(update)
 
 
 class Subscriptions(UserDict[str, Subscription]):
@@ -85,13 +85,24 @@ class RelayService:
 
     async def subscribe(self, client: ClientSession, request: NostrRequest) -> None:
         events = await self.event_repository.query(*request.filters)
-        for event in events:
-            update = NostrEventUpdate(
-                subscription_id=request.subscription_id, event=event
-            )
-            await client.send_event(update)
+        await self._send_stored_events(client, request.subscription_id, events)
 
         self.subscriptions.subscribe(request, client)
+
+    async def _send_stored_events(
+        self, client: ClientSession, subscription_id: str, events: list[NostrEvent]
+    ) -> None:
+        if not events:
+            return
+
+        for event in events:
+            event_update = NostrEventUpdate(
+                subscription_id=subscription_id, event=event
+            )
+            await client.send(event_update)
+
+        endmsg = NostrEOSE(subscription_id)
+        await client.send(endmsg)
 
     async def unsubscribe(self, close: NostrClose) -> None:
         self.subscriptions.unsubscribe(close.subscription_id)
