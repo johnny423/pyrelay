@@ -24,7 +24,7 @@ class EventBuilder:
     def create_event(
         self,
         content: str,
-        kind: EventKind = EventKind.TextNote,
+        kind: EventKind = EventKind.TextNote,  # type: ignore
         tags: Optional[list[NostrTag]] = None,
         created_at: Optional[int] = None,
     ) -> NostrEvent:

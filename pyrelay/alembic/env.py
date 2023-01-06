@@ -66,7 +66,7 @@ def run_migrations_online() -> None:
 
     """
     configuration = config.get_section(config.config_ini_section)
-    configuration["sqlalchemy.url"] = get_url()
+    configuration["sqlalchemy.url"] = get_url()  # type: ignore
 
     connectable = engine_from_config(
         config.get_section(config.config_ini_section),

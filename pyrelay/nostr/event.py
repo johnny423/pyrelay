@@ -10,7 +10,7 @@ EventId: TypeAlias = str  # <32-bytes sha256 of the the serialized event data>
 PubKey: TypeAlias = str  # <32-bytes hex-encoded public key of the event creator>,
 URL: TypeAlias = str
 
-KINDS = {
+KINDS: dict[str, range | int] = {
     "Metadata": 0,  # nip  1,5
     "TextNote": 1,  # nip  1
     "RecommendRelay": 2,  # nip  1
@@ -28,12 +28,11 @@ KINDS = {
     # Reserved
     "Replaceable": range(10000, 19999),
     "Ephemeral": range(20000, 29999),
-
 }
 
 
-def range_dict(d) -> dict:
-    new = {}
+def range_dict(d: dict[str, range | int]) -> dict[str, int]:
+    new: dict[str, int] = {}
     for key, value in d.items():
         if isinstance(value, range):
             new |= {f"{key}_{v}": v for v in value}
@@ -43,9 +42,7 @@ def range_dict(d) -> dict:
     return new
 
 
-EventKind = enum.IntEnum(
-    "EventKind", range_dict(KINDS)
-)
+EventKind = enum.IntEnum("EventKind", range_dict(KINDS))  # type: ignore
 
 
 def filter_none(attribute: attr.Attribute, value: Any) -> bool:

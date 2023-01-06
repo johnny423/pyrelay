@@ -1,4 +1,4 @@
-from typing import Any, Callable
+from typing import Any, Callable, Optional
 
 from pyrelay.nostr.event import NostrDataType
 from pyrelay.nostr.serialize import dumps
@@ -7,7 +7,7 @@ from pyrelay.nostr.serialize import dumps
 class BaseClientSession:
     def __init__(self) -> None:
         self._closed = False
-        self._on_close = None
+        self._on_close: Optional[Callable] = None
 
     @property
     def on_close(self) -> Callable[[], Any]:
