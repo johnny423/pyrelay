@@ -1,10 +1,13 @@
 import asyncio
+import logging
 
 import websockets
 
 from pynostr.client.client import NostrClient
 from pynostr.nostr.filters import NostrFilter
 
+logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger("WATCHER CLIENT")
 
 async def watcher() -> None:
     async with websockets.connect("ws://localhost:8001") as websocket:
@@ -22,7 +25,7 @@ async def watcher() -> None:
         await client.register("ididididi")  # , _filter1, _filter2, _filter3)
         while True:
             msg = await client.receive()
-            print(msg)
+            logger.info("got %s", msg)
 
 
 if __name__ == "__main__":

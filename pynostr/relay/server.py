@@ -13,7 +13,9 @@ session_maker = set_up_session_maker()
 repo = SqlAlchemyEventRepository(session_maker)
 subscriptions = Subscriptions()
 service = RelayService(repo, subscriptions)
-logging.basicConfig(level=logging.INFO)
+
+
+
 
 
 # Implementation

@@ -1,4 +1,5 @@
 import asyncio
+import logging
 from itertools import count
 
 import websockets
@@ -7,6 +8,9 @@ from pynostr.client.client import NostrClient
 from pynostr.nostr.event import NostrTag
 
 WS_LOCALHOST = "ws://localhost:8001"
+
+logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger("PRODUCER CLIENT")
 
 
 async def producer() -> None:

@@ -9,7 +9,8 @@ from pynostr.nostr.filters import NostrFilter, apply_many
 from pynostr.nostr.msgs import NostrClose, NostrEOSE, NostrEventUpdate, NostrRequest
 from pynostr.relay.client_session import ClientSession
 
-logger = logging.getLogger(__name__)
+logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger("RELAY")
 
 
 class EventsRepository(ABC):
@@ -58,13 +59,13 @@ class Subscriptions(UserDict[str, Subscription]):
 
 class RelayService:
     def __init__(
-        self, event_repository: EventsRepository, subscriptions: Subscriptions
+            self, event_repository: EventsRepository, subscriptions: Subscriptions
     ):
         self.subscriptions = subscriptions
         self.event_repository = event_repository
 
     async def handle(
-        self, client_session: ClientSession, message: NostrDataType
+            self, client_session: ClientSession, message: NostrDataType
     ) -> None:
         match message:
             case NostrEvent() as event:
@@ -90,7 +91,7 @@ class RelayService:
         self.subscriptions.subscribe(request, client)
 
     async def _send_stored_events(
-        self, client: ClientSession, subscription_id: str, events: list[NostrEvent]
+            self, client: ClientSession, subscription_id: str, events: list[NostrEvent]
     ) -> None:
         if not events:
             return
