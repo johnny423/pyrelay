@@ -20,6 +20,7 @@ class EventKind(Enum):
     EventDeletion = 5  # nip 9
     Repost = 6  # nip 18
     Reaction = 7  # nip 25
+    # Channels
     ChannelCreation = 40  # nip 28
     ChannelMetadata = 41  # nip 28
     ChannelMessage = 42  # nip 28
@@ -59,7 +60,7 @@ def sign_event_id(event_id: EventId, private_key_hex: str) -> str:
 
 
 def calc_event_id(
-    public_key: PubKey, created_at: int, kind_number: int, tags: list, content: str
+        public_key: PubKey, created_at: int, kind_number: int, tags: list, content: str
 ) -> str:
     data = [0, public_key, created_at, kind_number, tags, content]
     data_str = json.dumps(data, separators=(",", ":"), ensure_ascii=False)
