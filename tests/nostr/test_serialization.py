@@ -71,14 +71,14 @@ def test_serialize_request(
 ):
     filters = [
         NostrFilter(
-            ids,
-            authors,
-            kinds,
-            e_tags,
-            p_tags,
-            since,
-            until,
-            limit,
+            ids=ids,
+            authors=authors,
+            kinds=kinds,
+            e_tag=e_tags,
+            p_tag=p_tags,
+            since=since,
+            until=until,
+            limit=limit,
         )
         for _ in range(amount)
     ]

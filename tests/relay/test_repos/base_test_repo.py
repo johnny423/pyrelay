@@ -73,14 +73,14 @@ class EventRepoTestBase:
 
     @pytest.mark.asyncio
     async def test_no_match_kind_filter(self, event, repo):
-        kinds = list(EventKind)
+        kinds = list(EventKind)[:30]
         kinds.remove(event.kind)
         filt = NostrFilter(kinds=kinds)
         assert not await self.apply([filt], event, repo)
 
     @pytest.mark.asyncio
     async def test_all_kind_filter(self, event, repo):
-        kinds = list(EventKind)
+        kinds = list(EventKind)[:30]
         filt = NostrFilter(kinds=kinds)
         assert await self.apply([filt], event, repo)
 
@@ -138,7 +138,7 @@ class EventRepoTestBase:
         filt = NostrFilter(
             ids=[event.id],
             authors=[event.pubkey + "XXX", event.pubkey],
-            kinds=list(EventKind),
+            kinds=list(EventKind)[:30],
             since=event.created_at - 10,
             until=event.created_at + 10,
             p_tag=[tag]
@@ -151,7 +151,7 @@ class EventRepoTestBase:
         filt = NostrFilter(
             ids=[event.id],
             authors=[event.pubkey + "XXX"],
-            kinds=list(EventKind),
+            kinds=list(EventKind)[:30],
             since=event.created_at - 10,
             until=event.created_at + 10,
             p_tag=[tag]
@@ -163,7 +163,7 @@ class EventRepoTestBase:
         filt = NostrFilter(
             ids=[event.id],
             authors=[event.pubkey + "XXX", event.pubkey],
-            kinds=list(EventKind),
+            kinds=list(EventKind)[:30],
             since=event.created_at - 10,
             until=event.created_at + 10,
         )
@@ -174,7 +174,7 @@ class EventRepoTestBase:
         filt = NostrFilter(
             ids=[event.id],
             authors=[event.pubkey + "XXX"],
-            kinds=list(EventKind),
+            kinds=list(EventKind)[:30],
             since=event.created_at - 10,
             until=event.created_at + 10,
         )
@@ -185,7 +185,7 @@ class EventRepoTestBase:
         filt_match = NostrFilter(
             ids=[event.id],
             authors=[event.pubkey + "XXX", event.pubkey],
-            kinds=list(EventKind),
+            kinds=list(EventKind)[:30],
             since=event.created_at - 10,
             until=event.created_at + 10,
         )
@@ -193,7 +193,7 @@ class EventRepoTestBase:
         filt_no_match = NostrFilter(
             ids=[event.id],
             authors=[event.pubkey + "XXX"],
-            kinds=list(EventKind),
+            kinds=list(EventKind)[:30],
             since=event.created_at - 10,
             until=event.created_at + 10,
         )
@@ -212,3 +212,4 @@ class EventRepoTestBase:
         )
         assert self.apply(None, event, repo)
 
+# todo: state property based tests missing test save to repo events from different types

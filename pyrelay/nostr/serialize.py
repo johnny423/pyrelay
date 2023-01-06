@@ -45,6 +45,12 @@ def _parse_nostr_request(filters, subscription_id):
         if "kinds" in _filter:
             _filter["kinds"] = [EventKind(kind) for kind in _filter["kinds"]]
 
+        if "#p" in _filter:
+            _filter["p_tag"] = _filter.pop("#p")
+
+        if "#e" in _filter:
+            _filter["e_tag"] = _filter.pop("#e")
+
         _filter = NostrFilter(**_filter)
         _filters.append(_filter)
     return NostrRequest(subscription_id=subscription_id, filters=_filters)

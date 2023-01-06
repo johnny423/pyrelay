@@ -23,7 +23,7 @@ class SqlAlchemyEventRepository(EventsRepository):
 
     async def query(self, *filters: NostrFilter) -> list[NostrEvent]:
         query = (
-            select(NostrEvent).join(NostrTag).options(contains_eager(NostrEvent.tags))
+            select(NostrEvent).outerjoin(NostrTag).options(contains_eager(NostrEvent.tags))
         )
 
         query_builder = EventQueryBuilder(query)

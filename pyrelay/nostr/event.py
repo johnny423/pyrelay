@@ -1,5 +1,5 @@
+import enum
 import json
-from enum import Enum
 from hashlib import sha256
 from typing import Any, TypeAlias
 
@@ -10,22 +10,42 @@ EventId: TypeAlias = str  # <32-bytes sha256 of the the serialized event data>
 PubKey: TypeAlias = str  # <32-bytes hex-encoded public key of the event creator>,
 URL: TypeAlias = str
 
-
-class EventKind(Enum):
-    Metadata = 0  # nip  1,5
-    TextNote = 1  # nip  1
-    RecommendRelay = 2  # nip  1
-    ContactList = 3  # nip 2
-    EncryptedDirectMessage = 4  # nip 4
-    EventDeletion = 5  # nip 9
-    Repost = 6  # nip 18
-    Reaction = 7  # nip 25
+KINDS = {
+    "Metadata": 0,  # nip  1,5
+    "TextNote": 1,  # nip  1
+    "RecommendRelay": 2,  # nip  1
+    "ContactList": 3,  # nip 2
+    "EncryptedDirectMessage": 4,  # nip 4
+    "EventDeletion": 5,  # nip 9
+    "Repost": 6,  # nip 18
+    "Reaction": 7,  # nip 25
     # Channels
-    ChannelCreation = 40  # nip 28
-    ChannelMetadata = 41  # nip 28
-    ChannelMessage = 42  # nip 28
-    ChannelHideMessage = 43  # nip 28
-    ChannelMuteUser = 44  # nip 28
+    "ChannelCreation": 40,  # nip 28
+    "ChannelMetadata": 41,  # nip 28
+    "ChannelMessage": 42,  # nip 28
+    "ChannelHideMessage": 43,  # nip 28
+    "ChannelMuteUser": 44,  # nip 28
+    # Reserved
+    "Replaceable": range(10000, 19999),
+    "Ephemeral": range(20000, 29999),
+
+}
+
+
+def range_dict(d) -> dict:
+    new = {}
+    for key, value in d.items():
+        if isinstance(value, range):
+            new |= {f"{key}_{v}": v for v in value}
+        else:
+            new[key] = value
+
+    return new
+
+
+EventKind = enum.IntEnum(
+    "EventKind", range_dict(KINDS)
+)
 
 
 def filter_none(attribute: attr.Attribute, value: Any) -> bool:
@@ -88,7 +108,7 @@ class BaseNostrEvent(NostrDataType):
         return calc_event_id(
             public_key=self.pubkey,
             created_at=self.created_at,
-            kind_number=self.kind.value,
+            kind_number=self.kind,
             tags=[tag.serialize() for tag in self.tags],
             content=self.content,
         )
@@ -124,7 +144,7 @@ class NostrEvent(BaseNostrEvent):
     def dict(self) -> dict[str, Any]:
         msg = super(NostrEvent, self).dict()
         msg["tags"] = [tag.serialize() for tag in self.tags]
-        msg["kind"] = self.kind.value
+        msg["kind"] = self.kind
         return msg
 
 

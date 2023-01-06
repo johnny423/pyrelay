@@ -24,8 +24,8 @@ async def handler(websocket) -> None:
     try:
         while True:
             message = await websocket.recv()
-            message = loads(message)
-            await service.handle(client_session, message)
+            request = loads(message)
+            await service.handle(client_session, request)
     finally:
         client_session.close()
 

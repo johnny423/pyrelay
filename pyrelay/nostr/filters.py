@@ -56,7 +56,14 @@ class NostrFilter(NostrDataType):
     def serialize(self) -> Any:
         data = self.dict()
         if "kinds" in data:
-            data["kinds"] = [kind.value for kind in data["kinds"]]
+            data["kinds"] = [kind for kind in data["kinds"]]
+
+        if "e_tag" in data:
+            data["#e"] = data.pop("e_tag")
+
+        if "p_tag" in data:
+            data["#p"] = data.pop("p_tag")
+
         return data
 
 
