@@ -2,9 +2,9 @@ from typing import Optional
 
 from sqlalchemy.orm import sessionmaker
 
-from pynostr.relay.config import settings
-from pynostr.relay.db.session import start_engine, start_session, upgrade
-from pynostr.relay.db.tables import init_mapper
+from pyrelay.relay.config import settings
+from pyrelay.relay.db.session import start_engine, start_session, upgrade
+from pyrelay.relay.db.tables import init_mapper
 
 
 def set_up_session_maker(

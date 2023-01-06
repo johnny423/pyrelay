@@ -60,7 +60,7 @@ def sign_event_id(event_id: EventId, private_key_hex: str) -> str:
 
 
 def calc_event_id(
-        public_key: PubKey, created_at: int, kind_number: int, tags: list, content: str
+    public_key: PubKey, created_at: int, kind_number: int, tags: list, content: str
 ) -> str:
     data = [0, public_key, created_at, kind_number, tags, content]
     data_str = json.dumps(data, separators=(",", ":"), ensure_ascii=False)

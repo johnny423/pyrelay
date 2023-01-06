@@ -1,7 +1,7 @@
 import pytest
 
-from pynostr.nostr.event import NostrTag
-from pynostr.nostr.event_builder import EventBuilder
+from pyrelay.nostr.event import NostrTag
+from pyrelay.nostr.event_builder import EventBuilder
 
 
 @pytest.fixture(scope="function")

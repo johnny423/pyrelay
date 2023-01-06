@@ -1,21 +1,17 @@
 import asyncio
-import logging
 
 import websockets
 
-from pynostr.nostr.serialize import loads
-from pynostr.relay.bootstrap import set_up_session_maker
-from pynostr.relay.client_session import ClientSession
-from pynostr.relay.relay_service import RelayService, Subscriptions
-from pynostr.relay.repos.sqlalchemy_event_repo import SqlAlchemyEventRepository
+from pyrelay.nostr.serialize import loads
+from pyrelay.relay.bootstrap import set_up_session_maker
+from pyrelay.relay.client_session import ClientSession
+from pyrelay.relay.relay_service import RelayService, Subscriptions
+from pyrelay.relay.repos.sqlalchemy_event_repo import SqlAlchemyEventRepository
 
 session_maker = set_up_session_maker()
 repo = SqlAlchemyEventRepository(session_maker)
 subscriptions = Subscriptions()
 service = RelayService(repo, subscriptions)
-
-
-
 
 
 # Implementation

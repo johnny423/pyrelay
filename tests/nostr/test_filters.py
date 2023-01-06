@@ -1,8 +1,8 @@
 import pytest
 
-from pynostr.nostr.event import EventKind, NostrTag
-from pynostr.nostr.event_builder import EventBuilder
-from pynostr.nostr.filters import apply, NostrFilter, apply_many
+from pyrelay.nostr.event import EventKind, NostrTag
+from pyrelay.nostr.event_builder import EventBuilder
+from pyrelay.nostr.filters import apply, NostrFilter, apply_many
 
 
 @pytest.fixture(scope="module")

@@ -2,7 +2,7 @@ from typing import Any, Optional
 
 import attr
 
-from pynostr.nostr.event import EventId, EventKind, NostrDataType, NostrEvent, PubKey
+from pyrelay.nostr.event import EventId, EventKind, NostrDataType, NostrEvent, PubKey
 
 
 @attr.s(auto_attribs=True)

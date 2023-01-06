@@ -1,9 +1,9 @@
 import json
 from typing import Any
 
-from pynostr.nostr.event import EventKind, NostrDataType, NostrEvent, NostrTag
-from pynostr.nostr.filters import NostrFilter
-from pynostr.nostr.msgs import (
+from pyrelay.nostr.event import EventKind, NostrDataType, NostrEvent, NostrTag
+from pyrelay.nostr.filters import NostrFilter
+from pyrelay.nostr.msgs import (
     NostrClose,
     NostrEOSE,
     NostrEventUpdate,

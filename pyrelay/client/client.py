@@ -1,10 +1,10 @@
 from typing import Optional
 
-from pynostr.nostr.event import NostrDataType, NostrEvent, NostrTag
-from pynostr.nostr.event_builder import EventBuilder
-from pynostr.nostr.filters import NostrFilter
-from pynostr.nostr.msgs import NostrRequest
-from pynostr.nostr.serialize import dumps, loads
+from pyrelay.nostr.event import NostrDataType, NostrEvent, NostrTag
+from pyrelay.nostr.event_builder import EventBuilder
+from pyrelay.nostr.filters import NostrFilter
+from pyrelay.nostr.msgs import NostrRequest
+from pyrelay.nostr.serialize import dumps, loads
 
 
 class NostrClient:

@@ -2,7 +2,7 @@
 
 set -x
 cd ..
-mypy ./pynostr
-black ./pynostr --check
-isort --recursive --check-only ./pynostr
-flake8 ./pynostr
+mypy ./pyrelay
+black ./pyrelay --check
+isort --recursive --check-only ./pyrelay
+flake8 ./pyrelay

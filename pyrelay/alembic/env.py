@@ -6,7 +6,7 @@ from sqlalchemy import engine_from_config, pool
 
 sys.path.append("/Users/jonnyb/development/websocket")
 
-from pynostr.relay.db.tables import mapper_registry
+from pyrelay.relay.db.tables import mapper_registry
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

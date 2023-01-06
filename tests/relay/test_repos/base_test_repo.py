@@ -1,7 +1,7 @@
 import pytest
 
-from pynostr.nostr.event import EventKind, NostrTag
-from pynostr.nostr.filters import NostrFilter
+from pyrelay.nostr.event import EventKind, NostrTag
+from pyrelay.nostr.filters import NostrFilter
 
 
 class EventRepoTestBase:

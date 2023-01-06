@@ -1,6 +1,6 @@
 import pytest
 
-from pynostr.relay.repos.in_memory_event_repo import InMemoryEventsRepository
+from pyrelay.relay.repos.in_memory_event_repo import InMemoryEventsRepository
 from tests.relay.test_repos.base_test_repo import EventRepoTestBase
 
 

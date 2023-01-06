@@ -1,15 +1,15 @@
 import pytest
 from hypothesis import strategies as s, given
 
-from pynostr.nostr.event_builder import EventBuilder
-from pynostr.nostr.filters import NostrFilter
-from pynostr.nostr.msgs import (
+from pyrelay.nostr.event_builder import EventBuilder
+from pyrelay.nostr.filters import NostrFilter
+from pyrelay.nostr.msgs import (
     NostrEventUpdate,
     NostrRequest,
     NostrClose,
     NostrNoticeUpdate, NostrEOSE,
 )
-from pynostr.nostr.serialize import dumps, loads
+from pyrelay.nostr.serialize import dumps, loads
 from tests.strategies import free_text, msg_kind, timestamp, partial_hex32, hex32, non_negative, tags
 
 

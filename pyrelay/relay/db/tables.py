@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Enum, ForeignKey, Integer, PickleType, String, Table
 from sqlalchemy.orm import registry, relationship
 
-from pynostr.nostr.event import EventKind, NostrEvent, NostrTag
+from pyrelay.nostr.event import EventKind, NostrEvent, NostrTag
 
 mapper_registry = registry()
 

@@ -1,7 +1,7 @@
 import pytest
 from hypothesis import given
 
-from pynostr.nostr.event_builder import EventBuilder
+from pyrelay.nostr.event_builder import EventBuilder
 from tests.strategies import free_text, msg_kind, timestamp
 
 

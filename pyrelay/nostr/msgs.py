@@ -2,8 +2,8 @@ from typing import Any
 
 import attr
 
-from pynostr.nostr.event import NostrDataType, NostrEvent
-from pynostr.nostr.filters import NostrFilter
+from pyrelay.nostr.event import NostrDataType, NostrEvent
+from pyrelay.nostr.filters import NostrFilter
 
 
 @attr.s(auto_attribs=True)

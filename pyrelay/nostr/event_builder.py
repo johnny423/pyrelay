@@ -4,7 +4,7 @@ from typing import Optional
 
 import secp256k1
 
-from pynostr.nostr.event import EventKind, NostrEvent, NostrTag, UnsignedNostrEvent
+from pyrelay.nostr.event import EventKind, NostrEvent, NostrTag, UnsignedNostrEvent
 
 
 class EventBuilder:

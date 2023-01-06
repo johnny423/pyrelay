@@ -2,7 +2,7 @@ import string
 
 from hypothesis import strategies as s
 
-from pynostr.nostr.event import EventKind, NostrTag
+from pyrelay.nostr.event import EventKind, NostrTag
 
 free_text = s.text()
 msg_kind = s.from_type(EventKind)

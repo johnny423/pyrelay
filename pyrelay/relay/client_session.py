@@ -1,7 +1,7 @@
 from typing import Any, Callable
 
-from pynostr.nostr.event import NostrDataType
-from pynostr.nostr.serialize import dumps
+from pyrelay.nostr.event import NostrDataType
+from pyrelay.nostr.serialize import dumps
 
 
 class BaseClientSession:

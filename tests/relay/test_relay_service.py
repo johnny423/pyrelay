@@ -2,13 +2,13 @@ from collections import defaultdict
 
 import pytest
 
-from pynostr.nostr.event import EventKind, NostrTag, NostrDataType
-from pynostr.nostr.event_builder import EventBuilder
-from pynostr.nostr.filters import NostrFilter
-from pynostr.nostr.msgs import NostrEventUpdate, NostrRequest, NostrClose, NostrEOSE
-from pynostr.relay.client_session import BaseClientSession
-from pynostr.relay.relay_service import RelayService, Subscriptions
-from pynostr.relay.repos.in_memory_event_repo import InMemoryEventsRepository
+from pyrelay.nostr.event import EventKind, NostrTag, NostrDataType
+from pyrelay.nostr.event_builder import EventBuilder
+from pyrelay.nostr.filters import NostrFilter
+from pyrelay.nostr.msgs import NostrEventUpdate, NostrRequest, NostrClose, NostrEOSE
+from pyrelay.relay.client_session import BaseClientSession
+from pyrelay.relay.relay_service import RelayService, Subscriptions
+from pyrelay.relay.repos.in_memory_event_repo import InMemoryEventsRepository
 
 
 @pytest.fixture(scope="module")

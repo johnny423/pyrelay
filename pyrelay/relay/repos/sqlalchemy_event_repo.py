@@ -5,9 +5,9 @@ from sqlalchemy.orm import contains_eager, sessionmaker
 from sqlalchemy.sql import Select
 from sqlalchemy.sql.elements import BinaryExpression, BooleanClauseList
 
-from pynostr.nostr.event import EventKind, NostrEvent, NostrTag
-from pynostr.nostr.filters import NostrFilter
-from pynostr.relay.relay_service import EventsRepository
+from pyrelay.nostr.event import EventKind, NostrEvent, NostrTag
+from pyrelay.nostr.filters import NostrFilter
+from pyrelay.relay.relay_service import EventsRepository
 
 
 class SqlAlchemyEventRepository(EventsRepository):

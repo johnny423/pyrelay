@@ -1,6 +1,6 @@
-from pynostr.nostr.event import EventId, NostrEvent
-from pynostr.nostr.filters import NostrFilter, apply
-from pynostr.relay.relay_service import EventsRepository
+from pyrelay.nostr.event import EventId, NostrEvent
+from pyrelay.nostr.filters import NostrFilter, apply
+from pyrelay.relay.relay_service import EventsRepository
 
 
 class InMemoryEventsRepository(EventsRepository):
