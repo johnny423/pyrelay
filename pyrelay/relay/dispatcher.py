@@ -1,10 +1,10 @@
 from pyrelay.nostr.event import NostrDataType, NostrEvent
-from pyrelay.nostr.msgs import NostrRequest, NostrClose
+from pyrelay.nostr.msgs import NostrClose, NostrRequest
 from pyrelay.relay.client_session import ClientSession
-from pyrelay.relay.relay_service import EventsRepository, Subscriptions, UOW
-from pyrelay.relay.handlers.unsubscribe_handler import unsubscribe
-from pyrelay.relay.handlers.subscribe_handler import subscribe
 from pyrelay.relay.handlers.event_handler import send_event
+from pyrelay.relay.handlers.subscribe_handler import subscribe
+from pyrelay.relay.handlers.unsubscribe_handler import unsubscribe
+from pyrelay.relay.relay_service import UOW, EventsRepository, Subscriptions
 
 
 class RelayDispatcher:

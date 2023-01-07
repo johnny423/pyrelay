@@ -1,7 +1,7 @@
 from typing import Collection
 
 from pyrelay.nostr.event import NostrEvent
-from pyrelay.nostr.msgs import NostrRequest, NostrEventUpdate, NostrEOSE
+from pyrelay.nostr.msgs import NostrEOSE, NostrEventUpdate, NostrRequest
 from pyrelay.relay.client_session import ClientSession
 from pyrelay.relay.relay_service import UOW
 

@@ -7,10 +7,7 @@ import attr
 
 from pyrelay.nostr.event import EventId, NostrEvent
 from pyrelay.nostr.filters import NostrFilter, apply_many
-from pyrelay.nostr.msgs import (
-    NostrEventUpdate,
-    NostrRequest,
-)
+from pyrelay.nostr.msgs import NostrEventUpdate, NostrRequest
 from pyrelay.relay.client_session import ClientSession
 
 logging.basicConfig(format="%(name)s - %(levelname)s - %(message)s", level=logging.INFO)
@@ -77,4 +74,3 @@ class UOW:
     ):
         self.subscriptions = subscriptions
         self.event_repository = event_repository
-
