@@ -27,24 +27,28 @@ def generate_event(draw):
     ttags = draw(tags)
     return event_builder.create_event(content, tags=ttags)
 
+
 @composite
 def generate_event_with_tags(draw):
     event_builder = EventBuilder.from_generated()
     content = draw(free_text)
 
-    return event_builder.create_event(content, tags=[
-        NostrTag(
-            type="p",
-            key="1234567123456712345671234",
-            extra=["url://asdlkasdlks"],
-        ),
-        NostrTag(
-            type="e",
-            key="1234567123456712345671234",
-            extra=["url://asdlkasdlks"],
-        )
-    ]
+    return event_builder.create_event(
+        content,
+        tags=[
+            NostrTag(
+                type="p",
+                key="1234567123456712345671234",
+                extra=["url://asdlkasdlks"],
+            ),
+            NostrTag(
+                type="e",
+                key="1234567123456712345671234",
+                extra=["url://asdlkasdlks"],
+            )
+        ]
     )
+
 
 event = generate_event()
 events = s.lists(event, min_size=2, max_size=30)

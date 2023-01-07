@@ -57,7 +57,9 @@ class Subscriptions(UserDict[str, Subscription]):
         try:
             del self[subscription_id]
         except KeyError:
-            logger.warning("Trying to unsubscribe id=%s but it doesn't exists", subscription_id)
+            logger.warning(
+                "Trying to unsubscribe id=%s but it doesn't exists", subscription_id
+            )
 
     async def broadcast(self, event: NostrEvent) -> None:
         for subscription in self.values():
