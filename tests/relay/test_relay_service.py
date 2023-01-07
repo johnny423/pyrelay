@@ -7,7 +7,8 @@ from pyrelay.nostr.event_builder import EventBuilder
 from pyrelay.nostr.filters import NostrFilter
 from pyrelay.nostr.msgs import NostrEventUpdate, NostrRequest, NostrClose, NostrEOSE
 from pyrelay.relay.client_session import BaseClientSession
-from pyrelay.relay.relay_service import RelayService, Subscriptions
+from pyrelay.relay.relay_service import Subscriptions
+from pyrelay.relay.dispatcher import RelayDispatcher
 from pyrelay.relay.repos.in_memory_event_repo import InMemoryEventsRepository
 
 
@@ -28,7 +29,7 @@ class MockClientSession(BaseClientSession):
 def get_service():
     repo = InMemoryEventsRepository()
     subs = Subscriptions()
-    service = RelayService(repo, subs)
+    service = RelayDispatcher(repo, subs)
     return service
 
 

@@ -6,9 +6,7 @@ from sqlalchemy.orm import sessionmaker
 
 def upgrade(uri: str) -> None:
     alembic_cfg = Config()
-    alembic_cfg.set_main_option(
-        "script_location", "/Users/jonnyb/development/websocket/pyrelay/alembic"
-    )
+    alembic_cfg.set_main_option("script_location", "../pyrelay/alembic")
     alembic_cfg.set_main_option("sqlalchemy.url", uri)
     command.upgrade(alembic_cfg, "head")
 

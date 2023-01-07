@@ -7,7 +7,7 @@ from pyrelay.nostr.msgs import (
     NostrEventUpdate,
     NostrRequest,
     NostrClose,
-    NostrNoticeUpdate, NostrEOSE,
+    NostrNoticeUpdate, NostrEOSE, NostrCommandResults,
 )
 from pyrelay.nostr.serialize import dumps, loads
 from tests.strategies import free_text, msg_kind, timestamp, partial_hex32, hex32, non_negative, tags
@@ -95,6 +95,7 @@ def test_serialize_close(subscription_id):
     data = NostrClose(subscription_id)
     assert loads(dumps(data)) == data
 
+
 @given(subscription_id=free_text)
 def test_serialize_eose(subscription_id):
     data = NostrEOSE(subscription_id)
@@ -107,9 +108,28 @@ def test_serialize_notice_update(message):
     assert loads(dumps(data)) == data
 
 
+@given(
+    event_id=hex32,
+    saved=s.booleans(),
+    message=s.none() | free_text,
+)
+def test_serialize_command_results(
+        event_id,
+        saved,
+        message,
+):
+    data = NostrCommandResults(
+        event_id=event_id,
+        saved=saved,
+        message=message,
+    )
+    assert loads(dumps(data)) == data
+
+
 def test_loads_failed_json():
     with pytest.raises(ValueError):
         loads("asdasd")
+
 
 def test_loads_failed():
     with pytest.raises(ValueError):

@@ -1,7 +1,7 @@
 import enum
 import json
 from hashlib import sha256
-from typing import Any, TypeAlias
+from typing import Any, Self, TypeAlias
 
 import attr
 import secp256k1
@@ -55,6 +55,13 @@ class NostrDataType:
         """
         Each datatype should be able to covert into object that can be jsonify
         """
+
+    @classmethod
+    def deserialize(cls, **kwargs) -> Self:  # type: ignore
+        """
+        Each datatype should be able to loaded data into the relevant object
+        """
+        return cls(**kwargs)
 
     def dict(self) -> dict:
         return attr.asdict(self, filter=filter_none)
@@ -137,6 +144,15 @@ class NostrEvent(BaseNostrEvent):
     def serialize(self) -> Any:
         msg = self.dict()
         return ["EVENT", msg]
+
+    @classmethod
+    def deserialize(cls, *, event: dict[str, Any]) -> "NostrEvent":
+        event["tags"] = [
+            NostrTag(type=tag_type, key=key, extra=extra)
+            for tag_type, key, *extra in event["tags"]
+        ]
+        event["kind"] = EventKind(event["kind"])
+        return NostrEvent(**event)
 
     def dict(self) -> dict[str, Any]:
         msg = super(NostrEvent, self).dict()
