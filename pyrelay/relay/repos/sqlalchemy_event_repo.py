@@ -20,7 +20,7 @@ class SqlAlchemyEventRepository(EventsRepository):
             async with self.session_maker.begin():
                 query = (
                     update(NostrEvent)
-                    .where(NostrEvent.id.in_(event_ids))
+                    .where(NostrEvent.id.in_(event_ids))  # type: ignore
                     .values(deleted_at=datetime.now(timezone.utc))
                     .execution_options(synchronize_session="fetch")
                 )
