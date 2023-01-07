@@ -54,8 +54,10 @@ class Subscriptions(UserDict[str, Subscription]):
         client.on_close = lambda: self.pop(request.subscription_id, None)
 
     def unsubscribe(self, subscription_id: str) -> None:
-        # todo: handle not exists
-        del self[subscription_id]
+        try:
+            del self[subscription_id]
+        except KeyError:
+            logger.warning("Trying to unsubscribe id=%s but it doesn't exists", subscription_id)
 
     async def broadcast(self, event: NostrEvent) -> None:
         for subscription in self.values():

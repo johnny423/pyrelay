@@ -14,11 +14,6 @@ subscriptions = Subscriptions()
 service = RelayService(repo, subscriptions)
 
 
-# Implementation
-# todo: dependency injection
-# todo: try using broadcast (?)
-
-
 async def handler(websocket) -> None:
     client_session = ClientSession(websocket)
     try:

@@ -1,8 +1,5 @@
 # Missing Tests:
 #   repo
-#   todo: save and query
-#   todo: save multiple
-#   todo: different filters
 #       todo: limits
 #       todo: order?
 #
