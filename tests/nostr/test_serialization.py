@@ -111,7 +111,7 @@ def test_serialize_notice_update(message):
 @given(
     event_id=hex32,
     saved=s.booleans(),
-    message=s.none() | free_text,
+    message=free_text,
 )
 def test_serialize_command_results(
         event_id,

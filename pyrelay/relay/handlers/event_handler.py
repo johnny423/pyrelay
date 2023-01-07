@@ -12,7 +12,7 @@ async def send_event(uow: UOW, client: ClientSession, event: NostrEvent) -> None
     NIP-20 command results
     """
     async with uow:
-        if event.kind == EventKind.EventDeletion:
+        if event.kind == EventKind.EventDeletion:  # type: ignore
             await _handle_delete_event(uow.events, event)
 
         msg = await _save_event(uow.events, event)

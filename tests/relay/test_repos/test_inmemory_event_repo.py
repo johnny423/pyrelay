@@ -1,6 +1,6 @@
 import pytest
 
-from pyrelay.relay.repos.in_memory_event_repo import InMemoryEventsRepository
+from pyrelay.relay.bootstrap import get_uow_factory
 from tests.relay.test_repos.base_test_repo import (
     EventRepoTestBase,
     EventRepoNoFilters,
@@ -16,8 +16,8 @@ from tests.relay.test_repos.base_test_repo import (
 
 class TestInMemory(EventRepoTestBase):
     @pytest.fixture(scope="module")
-    def repo(self):
-        return InMemoryEventsRepository()
+    def uow(self):
+        return get_uow_factory(in_memory=True)()
 
 
 class TestInMemoryEventRepoNoFilters(TestInMemory, EventRepoNoFilters):

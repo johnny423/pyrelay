@@ -6,11 +6,9 @@ from pyrelay.nostr.event import EventKind, NostrTag, NostrDataType
 from pyrelay.nostr.event_builder import EventBuilder
 from pyrelay.nostr.filters import NostrFilter
 from pyrelay.nostr.msgs import NostrEventUpdate, NostrRequest, NostrClose, NostrEOSE
+from pyrelay.relay.bootstrap import get_uow_factory
 from pyrelay.relay.client_session import BaseClientSession
-from pyrelay.relay.relay_service import Subscriptions
 from pyrelay.relay.dispatcher import RelayDispatcher
-from pyrelay.relay.repos.in_memory_event_repo import InMemoryEventsRepository
-from pyrelay.relay.unit_of_work import InMemoryUOW
 
 
 @pytest.fixture(scope="module")
@@ -27,31 +25,32 @@ class MockClientSession(BaseClientSession):
         self.calls["send_event"].append(event_update)
 
 
-def get_service():
-    subs = Subscriptions()
-    uow = InMemoryUOW(subs)
-    dispatcher = RelayDispatcher(uow)
+def get_dispatcher():
+    uow_factory = get_uow_factory(in_memory=True)
+    dispatcher = RelayDispatcher(uow_factory)
     return dispatcher
 
 
-class TestRelayService:
+class TestRelayDispatcher:
     @pytest.mark.asyncio
     async def test_report_and_save_events(self, event_builder):
-        service = get_service()
+        dispatcher = get_dispatcher()
 
         events = []
         for i in range(10):
             event = event_builder.create_event(f"{i}")
             events.append(event)
             client_session = MockClientSession()
-            await service.handle(client_session, event)
+            await dispatcher.handle(client_session, event)
 
-        result = await service.uow.events.query()
+        async with dispatcher.uow_factory() as uow:
+            result = await uow.events.query()
+
         assert events == result
 
     @pytest.mark.asyncio
     async def test_subscribe_and_broadcast(self):
-        service = get_service()
+        dispatcher = get_dispatcher()
 
         event_builders = []
         for _ in range(10):
@@ -64,7 +63,7 @@ class TestRelayService:
             event = event_builder.create_event(f"{i}")
             events.append(event)
             client_session = MockClientSession()
-            await service.handle(client_session, event)
+            await dispatcher.handle(client_session, event)
 
         # Subscribe to events and query
         clients = []
@@ -74,7 +73,7 @@ class TestRelayService:
                 filters=[NostrFilter(authors=[event_builder.pub_key])]
             )
             subscriber_client_session = MockClientSession()
-            await service.handle(subscriber_client_session, subscribe_request)
+            await dispatcher.handle(subscriber_client_session, subscribe_request)
             clients.append(subscriber_client_session)
 
         for j, client in enumerate(clients):
@@ -90,7 +89,7 @@ class TestRelayService:
             event = event_builder.create_event(f"{i * 2}")
             events.append(event)
             client_session = MockClientSession()
-            await service.handle(client_session, event)
+            await dispatcher.handle(client_session, event)
 
         for j, client in enumerate(clients):
             calls = client.calls["send_event"]
@@ -105,13 +104,13 @@ class TestRelayService:
 
         # Un-subscribe
         for j, client in enumerate(clients):
-            await service.handle(client, NostrClose(f"{j}"))
+            await dispatcher.handle(client, NostrClose(f"{j}"))
 
         for i, event_builder in enumerate(event_builders):
             event = event_builder.create_event(f"{i * 3}")
             events.append(event)
             client_session = MockClientSession()
-            await service.handle(client_session, event)
+            await dispatcher.handle(client_session, event)
 
         for j, client in enumerate(clients):
             calls = client.calls["send_event"]
@@ -125,14 +124,14 @@ class TestRelayService:
     
     @pytest.mark.asyncio
     async def test_wrong_msg(self):
-        service = get_service()
+        dispatcher = get_dispatcher()
         client_session = MockClientSession()
         with pytest.raises(TypeError):
-            await service.handle(client_session, "hello")
+            await dispatcher.handle(client_session, "hello")
 
     @pytest.mark.asyncio
     async def test_event_3(self, event_builder):
-        service = get_service()
+        dispatcher = get_dispatcher()
         client_session = MockClientSession()
         event = event_builder.create_event(
             "", kind=EventKind.ContactList, tags=
@@ -142,4 +141,4 @@ class TestRelayService:
                 NostrTag("p", "612ae..e610f", extra=["ws://carolrelay.com/ws", "carol"]),
             ]
         )
-        service.handle(client_session, event)
+        await dispatcher.handle(client_session, event)

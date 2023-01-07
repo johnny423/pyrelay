@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any
 
 import attr
 
@@ -85,7 +85,7 @@ class NostrCommandResults(NostrDataType):
 
     event_id: EventId
     saved: bool
-    message: Optional[str] = None
+    message: str = ""
 
     def serialize(self) -> Any:
         return ["OK", self.event_id, self.saved, self.message or ""]

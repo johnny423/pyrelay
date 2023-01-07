@@ -1,5 +1,5 @@
 import abc
-from typing import Optional
+from typing import Optional, Self
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -11,27 +11,27 @@ class UOW:
     events: EventsRepository
     subscriptions: Subscriptions
 
-    async def __aenter__(self):
+    async def __aenter__(self) -> Self:
         return self
 
-    async def __aexit__(self, exn_type, exn_value, traceback):
+    async def __aexit__(self, exn_type, exn_value, traceback) -> None:
         if exn_type is None:
             await self.commit()
         else:
             await self.rollback()
 
     @abc.abstractmethod
-    async def commit(self) ->None:
+    async def commit(self) -> None:
         """
-                Committing all the work being done in this context
-                """
+        Committing all the work being done in this context
+        """
         raise NotImplementedError
 
     @abc.abstractmethod
     async def rollback(self) -> None:
         """
-                Undoing all the work being done in this context
-                """
+        Undoing all the work being done in this context
+        """
         raise NotImplementedError
 
 

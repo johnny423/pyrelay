@@ -7,6 +7,7 @@ from sqlalchemy.orm import clear_mappers
 from pyrelay.relay.bootstrap import set_up_session_maker
 from pyrelay.relay.db.tables import mapper_registry
 from pyrelay.relay.repos.sqlalchemy_event_repo import SqlAlchemyEventRepository
+from pyrelay.relay.unit_of_work import SqlAlchemyUOW
 from tests.relay.test_repos.base_test_repo import (
     EventRepoTestBase,
     EventRepoNoFilters,
@@ -33,8 +34,8 @@ class SqlalchemyTestMixin(EventRepoTestBase):
         clear_mappers()
 
     @pytest_asyncio.fixture()
-    async def repo(self, session_maker):
-        yield SqlAlchemyEventRepository(session_maker)
+    async def uow(self, session_maker):
+        yield SqlAlchemyUOW(session_maker, None)
 
         await self.tables_cleanup(session_maker)
 
