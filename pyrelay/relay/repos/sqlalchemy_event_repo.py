@@ -1,8 +1,9 @@
 from datetime import datetime, timezone
-from typing import Optional, Self
+from typing import Collection, Optional, Self
 
 from sqlalchemy import and_, column, or_, select, update
-from sqlalchemy.orm import contains_eager, sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import contains_eager
 from sqlalchemy.sql import Select
 from sqlalchemy.sql.elements import BinaryExpression, BooleanClauseList
 
@@ -12,30 +13,25 @@ from pyrelay.relay.relay_service import EventsRepository
 
 
 class SqlAlchemyEventRepository(EventsRepository):
-    def __init__(self, session: sessionmaker) -> None:
-        self.session_maker = session
+    def __init__(self, session: AsyncSession) -> None:
+        self.session = session
 
-    async def delete(self, event_ids: list[EventId]) -> None:
-        async with self.session_maker() as s:
-            async with self.session_maker.begin():
-                query = (
-                    update(NostrEvent)
-                    .where(NostrEvent.id.in_(event_ids))  # type: ignore
-                    .values(deleted_at=datetime.now(timezone.utc))
-                    .execution_options(synchronize_session="fetch")
-                )
+    async def delete(self, event_ids: Collection[EventId]) -> None:
+        # async with self.session.begin():
+        query = (
+            update(NostrEvent)
+            .where(NostrEvent.id.in_(event_ids))  # type: ignore
+            .values(deleted_at=datetime.now(timezone.utc))
+            .execution_options(synchronize_session="fetch")
+        )
 
-                await s.execute(query)
-            await s.commit()
+        await self.session.execute(query)
 
     async def add(self, event: NostrEvent) -> None:
-        async with self.session_maker() as s:
-            async with self.session_maker.begin():
-                s.add(event)
+        # async with self.session.begin():
+        self.session.add(event)
 
-            await s.commit()
-
-    async def query(self, *filters: NostrFilter) -> list[NostrEvent]:
+    async def query(self, *filters: NostrFilter) -> Collection[NostrEvent]:
         query = (
             select(NostrEvent)
             .outerjoin(NostrTag)
@@ -62,9 +58,8 @@ class SqlAlchemyEventRepository(EventsRepository):
         else:
             query = query.order_by(NostrEvent.created_at)
 
-        async with self.session_maker() as s:
-            x = await s.execute(query)
-            return [event for (event,) in x.unique()]
+        x = await self.session.execute(query)
+        return [event for (event,) in x.unique()]
 
 
 class EventQueryBuilder:

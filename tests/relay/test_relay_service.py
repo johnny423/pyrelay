@@ -10,6 +10,7 @@ from pyrelay.relay.client_session import BaseClientSession
 from pyrelay.relay.relay_service import Subscriptions
 from pyrelay.relay.dispatcher import RelayDispatcher
 from pyrelay.relay.repos.in_memory_event_repo import InMemoryEventsRepository
+from pyrelay.relay.unit_of_work import InMemoryUOW
 
 
 @pytest.fixture(scope="module")
@@ -27,10 +28,10 @@ class MockClientSession(BaseClientSession):
 
 
 def get_service():
-    repo = InMemoryEventsRepository()
     subs = Subscriptions()
-    service = RelayDispatcher(repo, subs)
-    return service
+    uow = InMemoryUOW(subs)
+    dispatcher = RelayDispatcher(uow)
+    return dispatcher
 
 
 class TestRelayService:
@@ -45,7 +46,7 @@ class TestRelayService:
             client_session = MockClientSession()
             await service.handle(client_session, event)
 
-        result = await service.event_repository.query()
+        result = await service.uow.events.query()
         assert events == result
 
     @pytest.mark.asyncio

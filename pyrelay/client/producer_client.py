@@ -21,7 +21,9 @@ async def producer() -> None:
             tag = NostrTag(type="e", key="asdasdasdasdasd", extra=[WS_LOCALHOST])
             tags.append(tag)
 
-            await client.send_event(f"{i}", tags=tags)
+            event, response = await client.send_event(f"{i}", tags=tags)
+            logger.info("Sent %s", event)
+            logger.info("got %s", response)
             await asyncio.sleep(5)
 
 

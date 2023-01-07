@@ -88,7 +88,7 @@ class NostrCommandResults(NostrDataType):
     message: Optional[str] = None
 
     def serialize(self) -> Any:
-        return ["OK", self.event_id, self.saved, self.message]
+        return ["OK", self.event_id, self.saved, self.message or ""]
 
     @classmethod
     def deserialize(cls, *, event_id, saved, message) -> "NostrCommandResults":

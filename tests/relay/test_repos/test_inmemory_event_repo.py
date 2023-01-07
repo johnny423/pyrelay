@@ -1,7 +1,6 @@
 import pytest
 
 from pyrelay.relay.repos.in_memory_event_repo import InMemoryEventsRepository
-
 from tests.relay.test_repos.base_test_repo import (
     EventRepoTestBase,
     EventRepoNoFilters,
@@ -13,42 +12,43 @@ from tests.relay.test_repos.base_test_repo import (
     EventRepoAllFilters,
     EventRepoEventSave,
 )
+
+
 class TestInMemory(EventRepoTestBase):
     @pytest.fixture(scope="module")
     def repo(self):
         return InMemoryEventsRepository()
 
 
-
-class TestSqlAlchemyEventRepoNoFilters(TestInMemory, EventRepoNoFilters):
+class TestInMemoryEventRepoNoFilters(TestInMemory, EventRepoNoFilters):
     ...
 
 
-class TestSqlAlchemyEventRepoIdsFilters(TestInMemory, EventRepoIdsFilters):
+class TestInMemoryEventRepoIdsFilters(TestInMemory, EventRepoIdsFilters):
     ...
 
 
-class TestSqlAlchemyEventRepoAuthorsFilters(
+class TestInMemoryEventRepoAuthorsFilters(
     TestInMemory, EventRepoAuthorsFilters
 ):
     ...
 
 
-class TestSqlAlchemyEventRepoKindsFilters(TestInMemory, EventRepoKindsFilters):
+class TestInMemoryEventRepoKindsFilters(TestInMemory, EventRepoKindsFilters):
     ...
 
 
-class TestSqlAlchemyEventRepoTimesFilters(TestInMemory, EventRepoTimesFilters):
+class TestInMemoryEventRepoTimesFilters(TestInMemory, EventRepoTimesFilters):
     ...
 
 
-class TestSqlAlchemyEventRepoTagsFilters(TestInMemory, EventRepoTagsFilters):
+class TestInMemoryEventRepoTagsFilters(TestInMemory, EventRepoTagsFilters):
     ...
 
 
-class TestSqlAlchemyEventRepoAllFilters(TestInMemory, EventRepoAllFilters):
+class TestInMemoryEventRepoAllFilters(TestInMemory, EventRepoAllFilters):
     ...
 
 
-class TestSqlAlchemyEventRepoEventSave(TestInMemory, EventRepoEventSave):
+class TestInMemoryEventRepoEventSave(TestInMemory, EventRepoEventSave):
     ...

@@ -3,16 +3,11 @@ import asyncio
 import websockets
 
 from pyrelay.nostr.serialize import loads
-from pyrelay.relay.bootstrap import set_up_session_maker
+from pyrelay.relay.bootstrap import get_uow_factory
 from pyrelay.relay.client_session import ClientSession
 from pyrelay.relay.dispatcher import RelayDispatcher
-from pyrelay.relay.relay_service import Subscriptions
-from pyrelay.relay.repos.sqlalchemy_event_repo import SqlAlchemyEventRepository
 
-session_maker = set_up_session_maker()
-repo = SqlAlchemyEventRepository(session_maker)
-subscriptions = Subscriptions()
-dispatcher = RelayDispatcher(repo, subscriptions)
+dispatcher = RelayDispatcher(uow_factory=get_uow_factory(in_memory=True))
 
 
 async def handler(websocket) -> None:

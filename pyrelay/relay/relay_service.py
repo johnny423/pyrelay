@@ -27,7 +27,7 @@ class EventsRepository(ABC):
         Fetch stored events that match one of the filters
         """
 
-    async def delete(self, event_ids: list[EventId]) -> None:
+    async def delete(self, event_ids: Collection[EventId]) -> None:
         """
         Mark event ids as deleted
         """
@@ -66,11 +66,3 @@ class Subscriptions(UserDict[str, Subscription]):
     async def broadcast(self, event: NostrEvent) -> None:
         for subscription in self.values():
             await subscription.update(event)
-
-
-class UOW:
-    def __init__(
-        self, event_repository: EventsRepository, subscriptions: Subscriptions
-    ):
-        self.subscriptions = subscriptions
-        self.event_repository = event_repository

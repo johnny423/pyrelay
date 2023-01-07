@@ -9,7 +9,7 @@ class InMemoryEventsRepository(EventsRepository):
     def __init__(self) -> None:
         self.data: dict[EventId, NostrEvent] = {}
 
-    async def delete(self, event_ids: list[EventId]) -> None:
+    async def delete(self, event_ids: Collection[EventId]) -> None:
         for event_id in event_ids:
             self.data.pop(event_id, None)
 

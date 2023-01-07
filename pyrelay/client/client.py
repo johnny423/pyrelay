@@ -3,7 +3,7 @@ from typing import Optional
 from pyrelay.nostr.event import NostrDataType, NostrEvent, NostrTag
 from pyrelay.nostr.event_builder import EventBuilder
 from pyrelay.nostr.filters import NostrFilter
-from pyrelay.nostr.msgs import NostrRequest
+from pyrelay.nostr.msgs import NostrCommandResults, NostrRequest
 from pyrelay.nostr.serialize import dumps, loads
 
 
@@ -14,11 +14,12 @@ class NostrClient:
 
     async def send_event(
         self, data: str, tags: Optional[list[NostrTag]] = None
-    ) -> NostrEvent:
+    ) -> tuple[NostrEvent, NostrCommandResults]:
         event = self.event_builder.create_event(data, tags=tags)
         serialized_msg = dumps(event)
         await self.websocket.send(serialized_msg)
-        return event
+        response = await self.websocket.recv()
+        return event, loads(response)
 
     async def receive(self) -> NostrDataType:
         data = await self.websocket.recv()
