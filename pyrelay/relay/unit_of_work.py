@@ -21,11 +21,17 @@ class UOW:
             await self.rollback()
 
     @abc.abstractmethod
-    async def commit(self):
+    async def commit(self) ->None:
+        """
+                Committing all the work being done in this context
+                """
         raise NotImplementedError
 
     @abc.abstractmethod
-    async def rollback(self):
+    async def rollback(self) -> None:
+        """
+                Undoing all the work being done in this context
+                """
         raise NotImplementedError
 
 
@@ -45,10 +51,10 @@ class SqlAlchemyUOW(UOW):
         await super().__aexit__(exn_type, exn_value, traceback)
         await self.session.close()
 
-    async def commit(self):
+    async def commit(self) -> None:
         await self.session.commit()
 
-    async def rollback(self):
+    async def rollback(self) -> None:
         await self.session.rollback()
 
 
@@ -57,8 +63,8 @@ class InMemoryUOW(UOW):
         self.subscriptions = subscriptions
         self.events = repo
 
-    async def commit(self):
-        pass
+    async def commit(self) -> None:
+        return
 
-    async def rollback(self):
-        pass
+    async def rollback(self) -> None:
+        return
