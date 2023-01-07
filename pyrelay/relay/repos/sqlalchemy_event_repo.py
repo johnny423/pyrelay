@@ -41,6 +41,7 @@ class SqlAlchemyEventRepository(EventsRepository):
             .outerjoin(NostrTag)
             .options(contains_eager(NostrEvent.tags))
             .filter(column("deleted_at").is_(None))
+            # todo: filter deleted event with references
         )
 
         query_builder = EventQueryBuilder(query)
