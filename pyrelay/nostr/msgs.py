@@ -1,8 +1,6 @@
-from typing import Any
-
 import attr
 
-from pyrelay.nostr.event import EventId, EventKind, NostrDataType, NostrEvent
+from pyrelay.nostr.event import EventId, EventKind, NostrDataType, NostrEvent, JSONValues
 from pyrelay.nostr.filters import NostrFilter
 
 
@@ -11,7 +9,7 @@ class NostrRequest(NostrDataType):
     subscription_id: str
     filters: tuple[NostrFilter, ...]
 
-    def serialize(self) -> Any:
+    def serialize(self) -> JSONValues:
         return [
             "REQ",
             self.subscription_id,
@@ -39,7 +37,7 @@ class NostrRequest(NostrDataType):
 class NostrClose(NostrDataType):
     subscription_id: str
 
-    def serialize(self) -> Any:
+    def serialize(self) -> JSONValues:
         return ["CLOSE", self.subscription_id]
 
 
@@ -48,7 +46,7 @@ class NostrEventUpdate(NostrDataType):
     subscription_id: str
     event: NostrEvent
 
-    def serialize(self) -> Any:
+    def serialize(self) -> JSONValues:
         _, event_serialized = self.event.serialize()
         return ["EVENT", self.subscription_id, event_serialized]
 
@@ -63,7 +61,7 @@ class NostrEventUpdate(NostrDataType):
 class NostrNoticeUpdate(NostrDataType):
     message: str
 
-    def serialize(self) -> Any:
+    def serialize(self) -> JSONValues:
         return ["NOTICE", self.message]
 
 
@@ -75,7 +73,7 @@ class NostrEOSE(NostrDataType):
 
     subscription_id: str
 
-    def serialize(self) -> Any:
+    def serialize(self) -> JSONValues:
         return ["EOSE", self.subscription_id]
 
 
@@ -87,7 +85,7 @@ class NostrCommandResults(NostrDataType):
     saved: bool
     message: str = ""
 
-    def serialize(self) -> Any:
+    def serialize(self) -> JSONValues:
         return ["OK", self.event_id, self.saved, self.message or ""]
 
     @classmethod

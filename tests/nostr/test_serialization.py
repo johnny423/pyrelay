@@ -38,7 +38,6 @@ def test_serialize_event(event_builder, content, kind, created_at):
 def test_serialize_event_update(
         event_builder, content, kind, created_at, subscription_id, tags
 ):
-    print(tags)
     event = event_builder.create_event(content=content, kind=kind, tags=tags, created_at=created_at)
     data = NostrEventUpdate(subscription_id=subscription_id, event=event)
     assert loads(dumps(data)) == data

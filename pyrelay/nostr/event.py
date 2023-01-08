@@ -1,10 +1,20 @@
 import enum
 import json
 from hashlib import sha256
-from typing import Any, Self, TypeAlias
+from typing import Any, Collection, Mapping, Self, TypeAlias
 
 import attr
 import secp256k1
+
+JSONValues: TypeAlias = (
+    Mapping[str, "JSONValues"]
+    | Collection["JSONValues"]
+    | str
+    | int
+    | float
+    | bool
+    | None
+)
 
 EventId: TypeAlias = str  # <32-bytes sha256 of the the serialized event data>
 PubKey: TypeAlias = str  # <32-bytes hex-encoded public key of the event creator>,
@@ -51,7 +61,7 @@ def filter_none(attribute: attr.Attribute, value: Any) -> bool:
 
 @attr.s(auto_attribs=True)
 class NostrDataType:
-    def serialize(self) -> Any:
+    def serialize(self) -> JSONValues:
         """
         Each datatype should be able to covert into object that can be jsonify
         """
@@ -73,7 +83,7 @@ class NostrTag(NostrDataType):
     key: str
     extra: list[str]
 
-    def serialize(self) -> Any:
+    def serialize(self) -> JSONValues:
         return [self.type, self.key] + (self.extra or [])
 
 
@@ -141,7 +151,7 @@ class NostrEvent(BaseNostrEvent):
     def verify(self) -> bool:
         return verify(event_id=self.calc_id(), pubkey=self.pubkey, sig=self.sig)
 
-    def serialize(self) -> Any:
+    def serialize(self) -> JSONValues:
         msg = self.dict()
         return ["EVENT", msg]
 

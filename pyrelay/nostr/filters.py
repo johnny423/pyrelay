@@ -1,8 +1,8 @@
-from typing import Any, Optional
+from typing import Optional
 
 import attr
 
-from pyrelay.nostr.event import EventId, EventKind, NostrDataType, NostrEvent, PubKey
+from pyrelay.nostr.event import EventId, EventKind, NostrDataType, NostrEvent, PubKey, JSONValues
 
 
 @attr.s(auto_attribs=True)
@@ -53,7 +53,7 @@ class NostrFilter(NostrDataType):
     def empty(cls) -> "NostrFilter":
         return cls()
 
-    def serialize(self) -> Any:
+    def serialize(self) -> JSONValues:
         data = self.dict()
         if "kinds" in data:
             data["kinds"] = [kind for kind in data["kinds"]]
