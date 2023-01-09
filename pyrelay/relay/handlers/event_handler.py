@@ -12,9 +12,6 @@ async def send_event(uow: UOW, client: ClientSession, event: NostrEvent) -> None
     NIP-20 command results
     """
     async with uow:
-        if event.kind == EventKind.EventDeletion:  # type: ignore
-            await _handle_delete_event(uow.events, event)
-
         msg = await _save_event(uow.events, event)
         await client.send(msg)
         if msg.saved:
@@ -26,6 +23,9 @@ async def _save_event(repo: EventsRepository, event: NostrEvent) -> NostrCommand
         return NostrCommandResults(
             event_id=event.id, saved=False, message="invalid: signature is wrong"
         )
+
+    if event.kind == EventKind.EventDeletion:  # type: ignore
+        await _handle_delete_event(repo, event)
 
     try:
         # todo: add duplicate validation
