@@ -7,7 +7,7 @@ from pyrelay.relay.bootstrap import get_uow_factory
 from pyrelay.relay.client_session import ClientSession
 from pyrelay.relay.dispatcher import RelayDispatcher
 
-dispatcher = RelayDispatcher(uow_factory=get_uow_factory(in_memory=True))
+dispatcher = RelayDispatcher(uow_factory=get_uow_factory())
 
 
 async def handler(websocket) -> None:

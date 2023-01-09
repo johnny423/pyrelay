@@ -1,0 +1,8 @@
+attr==0.3.2
+attrs==22.2.0
+pydantic==1.10.4
+secp256k1==0.14.0
+SQLAlchemy==1.4.46
+websockets==10.4
+alembic==1.9.1
+aiosqlite==0.18.0

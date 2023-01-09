@@ -6,8 +6,6 @@ from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engin
 from sqlalchemy.orm import sessionmaker
 
 CURRENT_FILE = os.path.dirname(os.path.realpath(__file__))
-print("booom!!")
-print(f"{CURRENT_FILE}")
 
 
 def upgrade(uri: str) -> None:

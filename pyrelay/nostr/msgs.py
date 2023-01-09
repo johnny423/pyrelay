@@ -1,6 +1,12 @@
 import attr
 
-from pyrelay.nostr.event import EventId, EventKind, NostrDataType, NostrEvent, JSONValues
+from pyrelay.nostr.event import (
+    EventId,
+    EventKind,
+    JSONValues,
+    NostrDataType,
+    NostrEvent,
+)
 from pyrelay.nostr.filters import NostrFilter
 
 

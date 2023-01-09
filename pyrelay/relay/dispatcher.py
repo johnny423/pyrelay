@@ -3,14 +3,14 @@ from typing import Callable
 from pyrelay.nostr.event import NostrDataType, NostrEvent
 from pyrelay.nostr.msgs import NostrClose, NostrRequest
 from pyrelay.relay.client_session import ClientSession
-from pyrelay.relay.handlers.event_handler import send_event
+from pyrelay.relay.handlers.send_event_handler import send_event
 from pyrelay.relay.handlers.subscribe_handler import subscribe
 from pyrelay.relay.handlers.unsubscribe_handler import unsubscribe
-from pyrelay.relay.unit_of_work import UOW
+from pyrelay.relay.unit_of_work import UnitOfWork
 
 
 class RelayDispatcher:
-    def __init__(self, uow_factory: Callable[[], UOW]):
+    def __init__(self, uow_factory: Callable[[], UnitOfWork]):
         self.uow_factory = uow_factory
 
     async def handle(

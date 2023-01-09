@@ -2,7 +2,14 @@ from typing import Optional
 
 import attr
 
-from pyrelay.nostr.event import EventId, EventKind, NostrDataType, NostrEvent, PubKey, JSONValues
+from pyrelay.nostr.event import (
+    EventId,
+    EventKind,
+    JSONValues,
+    NostrDataType,
+    NostrEvent,
+    PubKey,
+)
 
 
 @attr.s(auto_attribs=True)

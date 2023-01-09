@@ -7,7 +7,7 @@ from pyrelay.relay.db.session import start_engine, start_session, upgrade
 from pyrelay.relay.db.tables import init_mapper
 from pyrelay.relay.relay_service import Subscriptions
 from pyrelay.relay.repos.in_memory_event_repo import InMemoryEventsRepository
-from pyrelay.relay.unit_of_work import UOW, InMemoryUOW, SqlAlchemyUOW
+from pyrelay.relay.unit_of_work import InMemoryUOW, SqlAlchemyUOW, UnitOfWork
 
 
 def set_up_session_maker(
@@ -23,7 +23,7 @@ def set_up_session_maker(
     return start_session(engine)
 
 
-def get_uow_factory(in_memory: bool = False) -> Callable[[], UOW]:
+def get_uow_factory(in_memory: bool = False) -> Callable[[], UnitOfWork]:
     subscriptions = Subscriptions()
     if in_memory:
         repo = InMemoryEventsRepository()

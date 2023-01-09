@@ -7,7 +7,12 @@ from pyrelay.relay.relay_service import EventsRepository, Subscriptions
 from pyrelay.relay.repos.sqlalchemy_event_repo import SqlAlchemyEventRepository
 
 
-class UOW:
+class UnitOfWork:
+    """
+    Context manager which setup the resources atomic execution
+    over the shared state
+    """
+
     events: EventsRepository
     subscriptions: Subscriptions
 
@@ -35,7 +40,7 @@ class UOW:
         raise NotImplementedError
 
 
-class SqlAlchemyUOW(UOW):
+class SqlAlchemyUOW(UnitOfWork):
     def __init__(self, session_factory, subscriptions):
         self.session_factory = session_factory
         self.subscriptions = subscriptions
@@ -58,7 +63,7 @@ class SqlAlchemyUOW(UOW):
         await self.session.rollback()
 
 
-class InMemoryUOW(UOW):
+class InMemoryUOW(UnitOfWork):
     def __init__(self, subscriptions, repo):
         self.subscriptions = subscriptions
         self.events = repo

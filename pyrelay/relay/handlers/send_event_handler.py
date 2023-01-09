@@ -2,10 +2,10 @@ from pyrelay.nostr.event import EventKind, NostrEvent
 from pyrelay.nostr.msgs import NostrCommandResults
 from pyrelay.relay.client_session import ClientSession
 from pyrelay.relay.relay_service import EventsRepository
-from pyrelay.relay.unit_of_work import UOW
+from pyrelay.relay.unit_of_work import UnitOfWork
 
 
-async def send_event(uow: UOW, client: ClientSession, event: NostrEvent) -> None:
+async def send_event(uow: UnitOfWork, client: ClientSession, event: NostrEvent) -> None:
     """
     NIP-01
     NIP-09 event deletion todo: test + support reference events

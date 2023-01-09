@@ -3,10 +3,12 @@ from typing import Collection
 from pyrelay.nostr.event import NostrEvent
 from pyrelay.nostr.msgs import NostrEOSE, NostrEventUpdate, NostrRequest
 from pyrelay.relay.client_session import ClientSession
-from pyrelay.relay.unit_of_work import UOW
+from pyrelay.relay.unit_of_work import UnitOfWork
 
 
-async def subscribe(uow: UOW, client: ClientSession, request: NostrRequest) -> None:
+async def subscribe(
+    uow: UnitOfWork, client: ClientSession, request: NostrRequest
+) -> None:
     async with uow:
         events = await uow.events.query(*request.filters)
         await _send_stored_events(client, request.subscription_id, events)
