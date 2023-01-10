@@ -2,6 +2,9 @@ from pydantic import BaseModel
 
 
 class NIPConfig(BaseModel):
+    # NIP-9: Event deletion
+    nip_9: bool = True
+
     # NIP-11: Relay Information Document
     nip_11: bool = False
 

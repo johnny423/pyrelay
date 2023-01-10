@@ -28,7 +28,7 @@ async def _save_event(repo: EventsRepository, event: NostrEvent) -> NostrCommand
             event_id=event.id, saved=False, message="invalid: signature is wrong"
         )
 
-    if event.kind == EventKind.EventDeletion:  # type: ignore
+    if nips_config.nip_9 and event.kind == EventKind.EventDeletion:  # type: ignore
         await _handle_delete_event(repo, event)
 
     try:
