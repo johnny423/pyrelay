@@ -1,6 +1,7 @@
 from pyrelay.nostr.event import EventKind, NostrEvent
 from pyrelay.nostr.msgs import NostrCommandResults
 from pyrelay.relay.client_session import ClientSession
+from pyrelay.relay.nip_config import nips_config
 from pyrelay.relay.relay_service import EventsRepository
 from pyrelay.relay.unit_of_work import UnitOfWork
 
@@ -13,7 +14,10 @@ async def send_event(uow: UnitOfWork, client: ClientSession, event: NostrEvent) 
     """
     async with uow:
         msg = await _save_event(uow.events, event)
-        await client.send(msg)
+
+        if nips_config.nip_20:
+            await client.send(msg)
+
         if msg.saved:
             await uow.subscriptions.broadcast(event)
 

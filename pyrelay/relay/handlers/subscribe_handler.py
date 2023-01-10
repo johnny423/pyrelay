@@ -3,6 +3,7 @@ from typing import Collection
 from pyrelay.nostr.event import NostrEvent
 from pyrelay.nostr.msgs import NostrEOSE, NostrEventUpdate, NostrRequest
 from pyrelay.relay.client_session import ClientSession
+from pyrelay.relay.nip_config import nips_config
 from pyrelay.relay.unit_of_work import UnitOfWork
 
 
@@ -28,5 +29,6 @@ async def _send_stored_events(
         event_update = NostrEventUpdate(subscription_id=subscription_id, event=event)
         await client.send(event_update)
 
-    endmsg = NostrEOSE(subscription_id)
-    await client.send(endmsg)
+    if nips_config.nip_15:
+        endmsg = NostrEOSE(subscription_id)
+        await client.send(endmsg)
