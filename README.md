@@ -1,6 +1,68 @@
-https://github.com/nostr-protocol/nips
+# What is PyRelay?
 
-supporting NIPs
+PyRelay is a python implementation of a NOSTR Relay, using asyncio.
+Don't know whats NOSTR is? check it out [here](https://nostr.com/).
+
+# Quick start
+ 
+### Installing
+PyRelay require python 3.11 and uses poetry as dependency management tool.
+I suggest setting up virtual env before running locally, and make sure to install poetry to setup other requirements.
+
+Install using git
+```bash
+git clone https://github.com/johnny423/pyrelay
+cd pyrelay
+```
+### Run with docker compose
+```bash
+docker compose up
+```
+
+### Run Locally
+Install dependencies, without dev dependencies
+```bash
+poetry install --no-dev
+```
+
+Run the server
+```bash
+python ./pyrelay/relay/server.py
+```
+
+# Developer Setup
+Download and install the latest version of git.
+
+Configure git with your username and email.
+
+```bash
+git config --global user.name 'your name'
+git config --global user.email 'your email'
+```
+Make sure you have a GitHub account.
+
+Clone the repository locally.
+```bash
+git clone https://github.com/johnny423/pyrelay
+cd pyrelay
+```
+
+Install dependencies, include dev dependencies 
+```bash
+poetry install
+```
+
+### Running tests 
+You can run the tests with the scripts 
+```bash
+./scripts/test.sh
+```
+
+# Support status
+
+[Check the NIPs in here](https://github.com/nostr-protocol/nips)
+
+## Supported NIPs
 
 | supported | NIP    | description                                                  |
 |-----------|--------|--------------------------------------------------------------|

@@ -2,8 +2,6 @@ version: "0.1"
 services:
   relay:
     image: '${DOCKER_IMAGE_BACKEND?Variable not set}:${TAG-latest}'
-    depends_on:
-      - db
     env_file:
       - .env
     environment:
