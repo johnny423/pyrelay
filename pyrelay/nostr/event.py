@@ -86,6 +86,9 @@ class NostrTag(NostrDataType):
     def serialize(self) -> JSONValues:
         return [self.type, self.key] + (self.extra or [])
 
+    def __iter__(self):
+        return iter(self.serialize())
+
 
 def sign_event_id(event_id: EventId, private_key_hex: str) -> str:
     private_key = secp256k1.PrivateKey(bytes.fromhex(private_key_hex))
