@@ -9,7 +9,7 @@ class NIPConfig(BaseModel):
     nip_11: bool = False
 
     # NIP-12: Generic Tag Queries
-    nip_12: bool = False
+    nip_12: bool = True
 
     # NIP-15: End of Stored Events Notice
     nip_15: bool = True

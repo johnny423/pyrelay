@@ -77,11 +77,9 @@ class EventQueryBuilder:
             .filter_until(_filter.until)
         )
 
-        if _filter.e_tag:
-            filter_builder = filter_builder.filter_tags("e", _filter.e_tag)
-
-        if _filter.p_tag:
-            filter_builder = filter_builder.filter_tags("p", _filter.p_tag)
+        if _filter.generic_tags:
+            for key, values in _filter.generic_tags.items():
+                filter_builder = filter_builder.filter_tags(key, values)
 
         f = filter_builder.build()
         self.filters.append(f)

@@ -43,5 +43,5 @@ async def _save_event(repo: EventsRepository, event: NostrEvent) -> NostrCommand
 
 
 async def _handle_delete_event(repo: EventsRepository, event: NostrEvent):
-    keys_to_delete = event.e_tags_keys
+    keys_to_delete = event.e_tags
     await repo.delete(keys_to_delete)

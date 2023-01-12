@@ -108,40 +108,40 @@ class TestApplyFilter:
 
     def test_p_tags_filter(self, event):
         tag, *_ = event.p_tags
-        filt = NostrFilter(p_tag=[tag])
+        filt = NostrFilter(generic_tags={"p": [tag]})
         assert apply(filt, event)
 
     def test_e_tags_filter(self, event):
-        tag, *_ = event.e_tags_keys
-        filt = NostrFilter(p_tag=[tag])
+        tag, *_ = event.e_tags
+        filt = NostrFilter(generic_tags={"e": [tag]})
         assert apply(filt, event)
 
     def test_no_match_e_tags_filter(self, event):
-        tag, *_ = event.e_tags_keys
-        filt = NostrFilter(p_tag=[tag * 2])
+        tag, *_ = event.e_tags
+        filt = NostrFilter(generic_tags={"e": [tag * 2]})
         assert not apply(filt, event)
 
     def test_all_filter(self, event):
-        tag, *_ = event.e_tags_keys
+        tag, *_ = event.e_tags
         filt = NostrFilter(
             ids=[event.id],
             authors=[event.pubkey + "XXX", event.pubkey],
             kinds=list(EventKind),
             since=event.created_at - 10,
             until=event.created_at + 10,
-            p_tag=[tag]
+            generic_tags={"e": [tag]}
         )
         assert apply(filt, event)
 
     def test_all_filter_one_not_match(self, event):
-        tag, *_ = event.e_tags_keys
+        tag, *_ = event.e_tags
         filt = NostrFilter(
             ids=[event.id],
             authors=[event.pubkey + "XXX"],
             kinds=list(EventKind),
             since=event.created_at - 10,
             until=event.created_at + 10,
-            p_tag=[tag]
+            generic_tags={"e": [tag]}
         )
         assert not apply(filt, event)
 

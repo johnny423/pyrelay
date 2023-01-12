@@ -68,13 +68,18 @@ def test_serialize_request(
         until,
         limit,
 ):
+    tags = {}
+    if e_tags:
+        tags["e"] = e_tags
+    if p_tags:
+        tags["p"] = p_tags
+
     filters = [
         NostrFilter(
             ids=ids,
             authors=authors,
             kinds=kinds,
-            e_tag=e_tags,
-            p_tag=p_tags,
+            generic_tags=tags or None,
             since=since,
             until=until,
             limit=limit,

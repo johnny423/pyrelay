@@ -177,26 +177,26 @@ class EventRepoTagsFilters(EventRepoTestBase):
     @given(event=event_with_tags)
     @settings(suppress_health_check=[HealthCheck.function_scoped_fixture, ])
     async def test_p_tags_filter(self, event, uow):
-        assume(len(event.e_tags_keys) > 0)
+        assume(len(event.p_tags) > 0)
         tag, *_ = event.p_tags
-        filt = NostrFilter(p_tag=[tag])
+        filt = NostrFilter(generic_tags={"p": [tag]},)
         assert await self.assert_apply([filt], event, uow)
 
     @pytest.mark.asyncio
     @given(event=event_with_tags)
     @settings(suppress_health_check=[HealthCheck.function_scoped_fixture, ])
     async def test_e_tags_filter(self, event, uow):
-        tag, *_ = event.e_tags_keys
-        filt = NostrFilter(p_tag=[tag])
+        tag, *_ = event.e_tags
+        filt = NostrFilter(generic_tags={"e": [tag]},)
         assert await self.assert_apply([filt], event, uow)
 
     @pytest.mark.asyncio
     @given(event=event_with_tags)
     @settings(suppress_health_check=[HealthCheck.function_scoped_fixture, ])
     async def test_no_match_e_tags_filter(self, event, uow):
-        assume(len(event.e_tags_keys) > 0)
-        tag, *_ = event.e_tags_keys
-        filt = NostrFilter(p_tag=[tag * 2])
+        assume(len(event.e_tags) > 0)
+        tag, *_ = event.e_tags
+        filt = NostrFilter(generic_tags={"e": [tag*2]},)
         assert not await self.assert_apply([filt], event, uow)
 
 
@@ -205,15 +205,15 @@ class EventRepoAllFilters(EventRepoTestBase):
     @given(event=event_with_tags)
     @settings(suppress_health_check=[HealthCheck.function_scoped_fixture, ])
     async def test_all_filter(self, event, uow):
-        assume(len(event.e_tags_keys) > 0)
-        tag, *_ = event.e_tags_keys
+        assume(len(event.e_tags) > 0)
+        tag, *_ = event.e_tags
         filt = NostrFilter(
             ids=[event.id],
             authors=[event.pubkey + "XXX", event.pubkey],
             kinds=list(EventKind)[:30],
             since=event.created_at - 10,
             until=event.created_at + 10,
-            p_tag=[tag]
+            generic_tags={"e": [tag]},
         )
         assert await self.assert_apply([filt], event, uow)
 
@@ -221,15 +221,15 @@ class EventRepoAllFilters(EventRepoTestBase):
     @given(event=event_with_tags)
     @settings(suppress_health_check=[HealthCheck.function_scoped_fixture, ])
     async def test_all_filter_one_not_match(self, event, uow):
-        assume(len(event.e_tags_keys) > 0)
-        tag, *_ = event.e_tags_keys
+        assume(len(event.e_tags) > 0)
+        tag, *_ = event.e_tags
         filt = NostrFilter(
             ids=[event.id],
             authors=[event.pubkey + "XXX"],
             kinds=list(EventKind)[:30],
             since=event.created_at - 10,
             until=event.created_at + 10,
-            p_tag=[tag]
+            generic_tags={"e": [tag]},
         )
         assert not await self.assert_apply([filt], event, uow)
 

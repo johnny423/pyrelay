@@ -130,16 +130,16 @@ class BaseNostrEvent(NostrDataType):
             content=self.content,
         )
 
-    def _tags(self, tag_type: str) -> set[str]:
+    def get_tags_keys(self, tag_type: str) -> set[str]:
         return set(tag.key for tag in self.tags if tag.type == tag_type)
 
     @property
-    def e_tags_keys(self) -> set[str]:
-        return self._tags("e")
+    def e_tags(self) -> set[str]:
+        return self.get_tags_keys("e")
 
     @property
     def p_tags(self) -> set[str]:
-        return self._tags("p")
+        return self.get_tags_keys("p")
 
 
 @attr.s(auto_attribs=True)
