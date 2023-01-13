@@ -1,3 +1,4 @@
+import uuid
 from typing import Any, Callable, Optional
 
 from pyrelay.nostr.event import NostrDataType
@@ -30,6 +31,7 @@ class ClientSession(BaseClientSession):
     def __init__(self, websocket) -> None:
         super(ClientSession, self).__init__()
         self.websocket = websocket
+        self.uid = uuid.uuid4()
 
     async def send(self, msg: NostrDataType) -> None:
         if self._closed:
