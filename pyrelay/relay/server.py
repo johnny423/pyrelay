@@ -29,10 +29,10 @@ async def handler(websocket) -> None:
         client_session.close()
 
 
-async def main() -> None:
-    async with websockets.serve(ws_handler=handler, host="", port=8001):
-        await asyncio.Future()  # run forever
-
-
 if __name__ == "__main__":
-    asyncio.run(main())
+    event_loop = asyncio.get_event_loop()
+
+    start_websocket_server = websockets.serve(handler, "", 8001)
+    event_loop.run_until_complete(start_websocket_server)
+
+    event_loop.run_forever()
