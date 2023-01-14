@@ -4,33 +4,41 @@ PyRelay is a python implementation of a NOSTR Relay, using asyncio.
 Don't know whats NOSTR is? check it out [here](https://nostr.com/).
 
 # Quick start
- 
+
 ### Installing
-PyRelay require python 3.11 and uses poetry as dependency management tool.
-I suggest setting up virtual env before running locally, and make sure to install poetry to setup other requirements.
+
+PyRelay require python 3.11.
+I suggest setting up virtual env before running locally.
 
 Install using git
+
 ```bash
 git clone https://github.com/johnny423/pyrelay
 cd pyrelay
 ```
+
 ### Run with docker compose
+
 ```bash
 docker compose up
 ```
 
 ### Run Locally
+
 Install dependencies, without dev dependencies
+
 ```bash
-poetry install --no-dev
+pip install -r requirements.txt
 ```
 
 Run the server
+
 ```bash
 python ./pyrelay/relay/server.py
 ```
 
 # Developer Setup
+
 Download and install the latest version of git.
 
 Configure git with your username and email.
@@ -39,21 +47,26 @@ Configure git with your username and email.
 git config --global user.name 'your name'
 git config --global user.email 'your email'
 ```
+
 Make sure you have a GitHub account.
 
 Clone the repository locally.
+
 ```bash
 git clone https://github.com/johnny423/pyrelay
 cd pyrelay
 ```
 
-Install dependencies, include dev dependencies 
+Install dependencies, include dev dependencies
+
 ```bash
-poetry install
+pip install -r requirements.txt -r requirements-dev.txt -r requirements-test.txt
 ```
 
-### Running tests 
-You can run the tests with the scripts 
+### Running tests
+
+You can run the tests with the scripts
+
 ```bash
 ./scripts/test.sh
 ```
