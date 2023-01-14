@@ -1,3 +1,4 @@
+import uuid
 from collections import defaultdict
 
 import pytest
@@ -20,6 +21,7 @@ class MockClientSession(BaseClientSession):
     def __init__(self):
         super(MockClientSession, self).__init__()
         self.calls = defaultdict(list)
+        self.uid = uuid.uuid4()
 
     async def send(self, event_update: NostrDataType):
         self.calls["send_event"].append(event_update)
