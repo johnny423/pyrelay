@@ -1,3 +1,5 @@
+from os import environ
+
 from pydantic import AnyUrl, BaseModel
 
 
@@ -6,4 +8,4 @@ class RelaySettings(BaseModel):
     SQLALCHEMY_DATABASE_URI: AnyUrl = "sqlite:///data.db"  # type: ignore
 
 
-settings = RelaySettings()
+settings = RelaySettings.parse_obj(environ)
