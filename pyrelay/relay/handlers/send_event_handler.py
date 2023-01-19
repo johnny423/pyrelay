@@ -1,3 +1,5 @@
+import time
+
 from pyrelay.nostr.event import EventKind, NostrEvent
 from pyrelay.nostr.msgs import NostrCommandResults
 from pyrelay.relay.client_session import ClientSession
@@ -31,7 +33,7 @@ async def _save_event(repo: EventsRepository, event: NostrEvent) -> NostrCommand
     if nips_config.nip_9 and event.kind == EventKind.EventDeletion:  # type: ignore
         await _handle_delete_event(repo, event)
 
-    if nips_config.nip_22 and event.created_at not in range(*nips_config.nip_22):  # todo add test case
+    if not _is_creation_time_valid(event.created_at, time.time(), nips_config.nip_22):  # todo add test
         return NostrCommandResults(
             event_id=event.id, saved=False, message="invalid: timestamp is not in required time frame"
         )
@@ -50,3 +52,10 @@ async def _save_event(repo: EventsRepository, event: NostrEvent) -> NostrCommand
 async def _handle_delete_event(repo: EventsRepository, event: NostrEvent):
     keys_to_delete = event.e_tags
     await repo.delete(keys_to_delete)
+
+
+def _is_creation_time_valid(event_creation_time: int, current_time: float, nip_22_config: tuple[int, int]) -> bool:
+    if not nip_22_config:
+        return True
+    creation_time_offset = event_creation_time - current_time
+    return int(creation_time_offset) in range(*nip_22_config)
