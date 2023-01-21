@@ -33,7 +33,7 @@ async def _save_event(repo: EventsRepository, event: NostrEvent) -> NostrCommand
     if nips_config.nip_9 and event.kind == EventKind.EventDeletion:  # type: ignore
         await _handle_delete_event(repo, event)
 
-    if not is_creation_time_valid(event.created_at, time.time(), nips_config.nip_22):  # todo add test
+    if not is_creation_time_valid(event.created_at, time.time(), nips_config.nip_22):
         return NostrCommandResults(
             event_id=event.id, saved=False, message="invalid: timestamp is not in required time frame"
         )
