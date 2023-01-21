@@ -44,7 +44,7 @@ async def _attempt_timestamp(event_builder, timestamps: list[int], should_save: 
             "", created_at=timestamp
         )
         await dispatcher.handle(client_session, event)
-    for msg in list(client_session.calls.values())[0]:  # todo make prettier access to values
+    for msg in client_session.calls["send_event"]:
         assert msg.saved == should_save
 
 
@@ -180,8 +180,10 @@ class TestRelayDispatcher:
             return
         current_time = time.time()
         illegal_timestamps = [
-            int(current_time + nip_22_config[0] - 60),  # a minute before lower limit  # todo add far fetched timestamps
-            int(current_time + nip_22_config[1] + 60)  # a minute after upper limit
+            int(current_time + nip_22_config[0] - 60 * 60 * 24 * 365),  # a year before lower limit
+            int(current_time + nip_22_config[0] - 60),  # a minute before lower limit
+            int(current_time + nip_22_config[1] + 60),  # a minute after upper limit
+            int(current_time + nip_22_config[1] + 60 * 60 * 24 * 365)  # a year after upper limit
         ]
         await _attempt_timestamp(event_builder=event_builder, timestamps=illegal_timestamps, should_save=False)
 
