@@ -23,7 +23,7 @@ cd pyrelay
 docker compose up
 ```
 
-### Run Locally
+### Install Locally
 
 Install dependencies, without dev dependencies
 
@@ -31,7 +31,20 @@ Install dependencies, without dev dependencies
 pip install -r requirements.txt
 ```
 
-Run the server
+If you have trouble with installing `secp256k1` try executing
+```bash
+pip install wheel
+```
+then
+```bash
+python setup.py bdist_wheel 
+```
+and rerun  
+```bash
+pip install -r requirements.txt
+```
+
+### Run the server locally
 
 ```bash
 python ./pyrelay/relay/server.py
@@ -82,22 +95,22 @@ You can run the tests with the scripts
 | V         | NIP-01 | Basic protocol flow description                              |
 | V         | NIP-02 | Contact List and Petnames                                    |
 | X         | NIP-03 | OpenTimestamps Attestations for Events                       |
-| X         | NIP-04 | Encrypted Direct Message                                     |
-| X         | NIP-05 | Mapping Nostr keys to DNS-based internet identifiers         |
-| X         | NIP-06 | Basic key derivation from mnemonic seed phrase               |
-| X         | NIP-07 | window.nostr capability for web browsers                     |
+| V         | NIP-04 | Encrypted Direct Message                                     |
+| V         | NIP-05 | Mapping Nostr keys to DNS-based internet identifiers         |
+| V         | NIP-06 | Basic key derivation from mnemonic seed phrase               |
+| V         | NIP-07 | window.nostr capability for web browsers                     |
 | X         | NIP-08 | Handling Mentions                                            |
-| X         | NIP-09 | Event Deletion                                               |
+| V         | NIP-09 | Event Deletion                                               |
 | X         | NIP-10 | Conventions for clients' use of e and p tags in text events. |
 | X         | NIP-11 | Relay Information Document                                   |
-| X         | NIP-12 | Generic Tag Queries                                          |
+| V         | NIP-12 | Generic Tag Queries                                          |
 | X         | NIP-13 | Proof of Work                                                |
 | X         | NIP-14 | Subject tag in text events.                                  |
-| X         | NIP-15 | End of Stored Events Notice                                  |
+| V         | NIP-15 | End of Stored Events Notice                                  |
 | X         | NIP-16 | Event Treatment                                              |
 | X         | NIP-18 | Reposts                                                      |
 | X         | NIP-19 | bech32-encoded entities                                      |
-| X         | NIP-20 | Command Results                                              |
+| V         | NIP-20 | Command Results                                              |
 | X         | NIP-22 | Event created_at Limits                                      |
 | X         | NIP-25 | Reactions                                                    |
 | X         | NIP-26 | Delegated Event Signing                                      |
