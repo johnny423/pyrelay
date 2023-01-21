@@ -12,6 +12,7 @@ from pyrelay.relay.bootstrap import get_uow_factory
 from pyrelay.relay.client_session import BaseClientSession
 from pyrelay.relay.dispatcher import RelayDispatcher
 from pyrelay.relay.nip_config import nips_config
+from pyrelay.relay.handlers.send_event_handler import is_creation_time_valid
 
 
 @pytest.fixture(scope="module")
@@ -179,7 +180,33 @@ class TestRelayDispatcher:
             return
         current_time = time.time()
         illegal_timestamps = [
-            int(current_time + nip_22_config[0] - 60),  # a minute before lower limit
+            int(current_time + nip_22_config[0] - 60),  # a minute before lower limit  # todo add far fetched timestamps
             int(current_time + nip_22_config[1] + 60)  # a minute after upper limit
         ]
         await _attempt_timestamp(event_builder=event_builder, timestamps=illegal_timestamps, should_save=False)
+
+    def test_timestamp_validation(self):
+        good_timestamps_params = [
+            (1500, 2000, (-600, 0)),
+            (1700, 2000, (-600, -200)),
+            (190000, 100000, (80000, 100000)),
+            (250000, 100000, (-600, 500000)),
+            (100000, 100000, (0, 1)),
+            (101, 100, (-600, 500000)),
+            (8000, 100000, None),
+        ]
+        bad_timestamps_params = [
+            (1300, 2000, (-600, 0)),
+            (1900, 2000, (-600, -200)),
+            (150000, 100000, (80000, 100000)),
+            (9999999, 100000, (-600, 500000)),
+            (100001, 100000, (0, 1)),
+            (151, 100, (-600, 50)),
+        ]
+        for param_list, expected in [
+            (good_timestamps_params, True),
+            (bad_timestamps_params, False)
+        ]:
+            for param_instance in param_list:
+                result = is_creation_time_valid(*param_instance)
+                assert result == expected

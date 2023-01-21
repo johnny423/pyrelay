@@ -1,8 +1,8 @@
 from pydantic import BaseModel
 
 # timestamp limits relative to current time
-LOWER_TIMESTAMP_OFFSET_LIMIT = - 60 * 60 * 24  # allow up to one day into the past
-UPPER_TIMESTAMP_OFFSET_LIMIT = 60 * 15  # allow up to 15 minutes into the future
+LOWER_TIMESTAMP_OFFSET_LIMIT = - 60 * 60 * 24  # allow up to one day into the past - inclusive
+UPPER_TIMESTAMP_OFFSET_LIMIT = 60 * 15  # allow up to 15 minutes into the future - exclusive
 
 
 class NIPConfig(BaseModel):
