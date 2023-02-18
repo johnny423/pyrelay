@@ -76,6 +76,14 @@ Install dependencies, include dev dependencies
 pip install -r requirements.txt -r requirements-dev.txt -r requirements-test.txt
 ```
 
+Install pre-commit
+
+```bash
+pre-commit install
+```
+
+Then, before committing, make sure `Run git hooks` is checked.
+
 ### Running tests
 
 You can run the tests with the scripts
