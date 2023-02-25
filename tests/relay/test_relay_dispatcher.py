@@ -1,3 +1,4 @@
+import time
 import uuid
 from collections import defaultdict
 
@@ -10,6 +11,8 @@ from pyrelay.nostr.msgs import NostrEventUpdate, NostrRequest, NostrClose, Nostr
 from pyrelay.relay.bootstrap import get_uow_factory
 from pyrelay.relay.client_session import BaseClientSession
 from pyrelay.relay.dispatcher import RelayDispatcher
+from pyrelay.relay.nip_config import nips_config
+from pyrelay.relay.handlers.send_event_handler import is_creation_time_valid
 
 
 @pytest.fixture(scope="module")
@@ -31,6 +34,18 @@ def get_dispatcher():
     uow_factory = get_uow_factory(in_memory=True)
     dispatcher = RelayDispatcher(uow_factory)
     return dispatcher
+
+
+async def _attempt_timestamp(event_builder, timestamps: list[int], should_save: bool):
+    dispatcher = get_dispatcher()
+    client_session = MockClientSession()
+    for timestamp in timestamps:
+        event = event_builder.create_event(
+            "", created_at=timestamp
+        )
+        await dispatcher.handle(client_session, event)
+    for msg in client_session.calls["send_event"]:
+        assert msg.saved == should_save
 
 
 class TestRelayDispatcher:
@@ -123,7 +138,7 @@ class TestRelayDispatcher:
 
             ]
             assert calls == expected
-    
+
     @pytest.mark.asyncio
     async def test_wrong_msg(self):
         dispatcher = get_dispatcher()
@@ -144,3 +159,56 @@ class TestRelayDispatcher:
             ]
         )
         await dispatcher.handle(client_session, event)
+
+    @pytest.mark.asyncio
+    async def test_legal_timestamp(self, event_builder):
+        nip_22_config = nips_config.nip_22
+        if not nip_22_config:
+            return
+        current_time = time.time()
+        legal_timeframe_size = nip_22_config[1] - nip_22_config[0]
+        lower_bound_timestamp = current_time + nip_22_config[0]
+        amount = 5
+        # do not check lower bound as it can fail due to runtime delay
+        legal_timestamps = [lower_bound_timestamp + legal_timeframe_size / amount * i for i in range(1, amount + 1)]
+        await _attempt_timestamp(event_builder=event_builder, timestamps=legal_timestamps, should_save=True)
+
+    @pytest.mark.asyncio
+    async def test_illegal_timestamp(self, event_builder):
+        nip_22_config = nips_config.nip_22
+        if not nip_22_config:
+            return
+        current_time = time.time()
+        illegal_timestamps = [
+            int(current_time + nip_22_config[0] - 60 * 60 * 24 * 365),  # a year before lower limit
+            int(current_time + nip_22_config[0] - 60),  # a minute before lower limit
+            int(current_time + nip_22_config[1] + 60),  # a minute after upper limit
+            int(current_time + nip_22_config[1] + 60 * 60 * 24 * 365)  # a year after upper limit
+        ]
+        await _attempt_timestamp(event_builder=event_builder, timestamps=illegal_timestamps, should_save=False)
+
+    def test_timestamp_validation(self):
+        good_timestamps_params = [
+            (1500, 2000, (-600, 0)),
+            (1700, 2000, (-600, -200)),
+            (190000, 100000, (80000, 100000)),
+            (250000, 100000, (-600, 500000)),
+            (100000, 100000, (0, 1)),
+            (101, 100, (-600, 500000)),
+            (8000, 100000, None),
+        ]
+        bad_timestamps_params = [
+            (1300, 2000, (-600, 0)),
+            (1900, 2000, (-600, -200)),
+            (150000, 100000, (80000, 100000)),
+            (9999999, 100000, (-600, 500000)),
+            (100001, 100000, (0, 1)),
+            (151, 100, (-600, 50)),
+        ]
+        for param_list, expected in [
+            (good_timestamps_params, True),
+            (bad_timestamps_params, False)
+        ]:
+            for param_instance in param_list:
+                result = is_creation_time_valid(*param_instance)
+                assert result == expected
