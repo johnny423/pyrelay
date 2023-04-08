@@ -32,6 +32,13 @@ pip install -r requirements.txt
 ```
 
 If you have trouble with installing `secp256k1` try executing
+
+On fedora `python-devel` should be installed
+
+```bash
+# dnf install python-devel
+```
+
 ```bash
 pip install wheel
 ```
